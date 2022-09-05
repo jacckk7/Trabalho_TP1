@@ -14,8 +14,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.File;  // Import the File class
-import java.io.FileNotFoundException;  // Import this class to handle errors
+import java.io.File; // Import the File class
+import java.io.FileNotFoundException; // Import this class to handle errors
 import java.util.Scanner; // Import the Scanner class to read text files
 
 // import java.awt.Font; -> se for imprimir textos na tela
@@ -40,7 +40,7 @@ public class GamePanel extends Canvas implements Runnable {
 		keyHandler = new KeyHandler();
 		this.addKeyListener(keyHandler);
 		player = new Player(this, keyHandler);
-		tm = new TileManager();
+		tm = new TileManager(this);
 		tm.getMap();
 	}
 
@@ -85,7 +85,6 @@ public class GamePanel extends Canvas implements Runnable {
 			return;
 		}
 		Graphics g = bs.getDrawGraphics();
-		tm.drawMap(g);
 		g.fillRect(0, 0, WIDTH, HEIGHT);
 		player.draw(g);
 		bs.show();
@@ -211,35 +210,35 @@ class Player extends Character {
 	public void update() {
 		if (kh.upPressed) {
 			positionY -= speed;
-			direction="up";
+			direction = "up";
 			return;
 		}
 		if (kh.downPressed) {
 			positionY += speed;
-			direction="down";
+			direction = "down";
 			return;
 		}
 		if (kh.leftPressed) {
 			positionX -= speed;
-			direction="left";
+			direction = "left";
 			return;
 		}
 		if (kh.rightPressed) {
 			positionX += speed;
-			direction="right";
+			direction = "right";
 			return;
 		}
 	}
 
 	public void draw(Graphics g) {
-		BufferedImage image= null;;
+		BufferedImage image = null;
 
-		switch(direction){
+		switch (direction) {
 			case "up":
-				image=up1;
+				image = up1;
 				break;
 			case "down":
-				image=down1;
+				image = down1;
 				break;
 			case "right":
 				image = right1;
@@ -248,7 +247,7 @@ class Player extends Character {
 				image = left1;
 				break;
 		}
-		g.drawImage(image, positionX, positionY, gp.tileSize,gp.tileSize,null);
+		g.drawImage(image, positionX, positionY, gp.tileSize, gp.tileSize, null);
 	}
 
 	public void getPlayerImage() {
@@ -268,47 +267,46 @@ class Player extends Character {
 
 }
 
-class TileManager{
-	 int[][] mapTiles = new int[16][15];
+class TileManager {
+	int[][] mapTiles = new int[15][16];
+	GamePanel gp;
 
-
-	public TileManager() {
+	public TileManager(GamePanel gamePanel) {
+		this.gp = gamePanel;
 	}
-	
 
-	 public void getMap(){
-		try{
-			InputStream is = getClass().getResourceAsStream("/map.txt");
-			BufferedReader br = new BufferedReader(new InputStreamReader(is));
-			
-			for(int i=0;i<16;i++){
-				String line = br.readLine();
-				for(int j=0;j<15;j++){
-					String numbers[] = line.split(" ");
-					int num = Integer.parseInt(numbers[j]);
-					mapTiles[i][j] = num;
+	public void getMap() {
+		try {
+			File map = new File("map.txt");
+			Scanner reader = new Scanner(map);
+			int line = 0;
+			while (reader.hasNextLine()) {
+				String[] data = reader.nextLine().split(" ");
+				for (int column = 0; column < data.length; column++) {
+					mapTiles[line][column] = Integer.parseInt(data[column]);
 				}
+				line++;
 			}
-			br.close();
-		}catch(Exception e){
+			reader.close();
+		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
-	 }
 
-	 public void drawMap(Graphics g) {
-		for(int i=0;i<16;i++){
-			for(int j=0;j<15;j++){
-				try{
-					BufferedImage image=null;
-					if(mapTiles[i][j]==0){
-						image = ImageIO.read(getClass().getResourceAsStream("/bush.png"));
-					}
-					else if(mapTiles[i][j]==1){
-						image = ImageIO.read(getClass().getResourceAsStream("/sand.png"));
-					}
+	}
 
-					g.drawImage(image, i*16, j*16, null);
-				}catch(IOException e){
+	public void drawMap(Graphics g) {
+		for (int line = 0; line < 15; line++) {
+			for (int col = 0; col < 16; col++) {
+				try {
+					BufferedImage image = null;
+					if (mapTiles[line][col] == 0) {
+						image = ImageIO.read(getClass().getResourceAsStream("/link_right2.png"));
+					} else if (mapTiles[line][col] == 1) {
+						image = ImageIO.read(getClass().getResourceAsStream("/link_right1.png"));
+					}
+					g.drawImage(image, 16*line, 16*col, gp.tileSize, gp.tileSize, null);
+
+				} catch (IOException e) {
 					e.printStackTrace();
 				}
 			}
