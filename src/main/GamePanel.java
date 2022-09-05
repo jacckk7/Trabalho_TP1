@@ -10,7 +10,13 @@ import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.File;  // Import the File class
+import java.io.FileNotFoundException;  // Import this class to handle errors
+import java.util.Scanner; // Import the Scanner class to read text files
 
 // import java.awt.Font; -> se for imprimir textos na tela
 
@@ -26,6 +32,7 @@ public class GamePanel extends Canvas implements Runnable {
 	public final short tileSize = originalTileSize * SCALE;
 	private KeyHandler keyHandler;
 	Player player;
+	TileManager tm;
 
 	public GamePanel() {
 		setPreferredSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));
@@ -33,6 +40,8 @@ public class GamePanel extends Canvas implements Runnable {
 		keyHandler = new KeyHandler();
 		this.addKeyListener(keyHandler);
 		player = new Player(this, keyHandler);
+		tm = new TileManager();
+		tm.getMap();
 	}
 
 	public void initFrame() {
@@ -76,7 +85,7 @@ public class GamePanel extends Canvas implements Runnable {
 			return;
 		}
 		Graphics g = bs.getDrawGraphics();
-		g.setColor(Color.WHITE);
+		tm.drawMap(g);
 		g.fillRect(0, 0, WIDTH, HEIGHT);
 		player.draw(g);
 		bs.show();
@@ -257,4 +266,52 @@ class Player extends Character {
 		}
 	}
 
+}
+
+class TileManager{
+	 int[][] mapTiles = new int[16][15];
+
+
+	public TileManager() {
+	}
+	
+
+	 public void getMap(){
+		try{
+			InputStream is = getClass().getResourceAsStream("/map.txt");
+			BufferedReader br = new BufferedReader(new InputStreamReader(is));
+			
+			for(int i=0;i<16;i++){
+				String line = br.readLine();
+				for(int j=0;j<15;j++){
+					String numbers[] = line.split(" ");
+					int num = Integer.parseInt(numbers[j]);
+					mapTiles[i][j] = num;
+				}
+			}
+			br.close();
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	 }
+
+	 public void drawMap(Graphics g) {
+		for(int i=0;i<16;i++){
+			for(int j=0;j<15;j++){
+				try{
+					BufferedImage image=null;
+					if(mapTiles[i][j]==0){
+						image = ImageIO.read(getClass().getResourceAsStream("/bush.png"));
+					}
+					else if(mapTiles[i][j]==1){
+						image = ImageIO.read(getClass().getResourceAsStream("/sand.png"));
+					}
+
+					g.drawImage(image, i*16, j*16, null);
+				}catch(IOException e){
+					e.printStackTrace();
+				}
+			}
+		}
+	}
 }

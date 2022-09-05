@@ -1,6 +1,6 @@
 package main;
 
-public class Character {
+class Character {
 	public int life;
 	public int positionX;
 	public int positionY;
