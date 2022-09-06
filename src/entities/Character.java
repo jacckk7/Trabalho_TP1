@@ -1,4 +1,4 @@
-package main;
+package entities;
 
 class Character {
 	public int life;

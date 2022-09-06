@@ -1,15 +1,20 @@
-package main;
+package entities;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
+
+import handlers.KeyHandler;
+import main.App;
+
+import java.io.FileInputStream;
 import java.io.IOException;
 
 public class Player extends Character {
-	GamePanel gp;
+	App gp;
 	KeyHandler kh;
 	public BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
 
-	public Player(GamePanel gp, KeyHandler kh) {
+	public Player(App gp, KeyHandler kh) {
 		super(0, 0, 4.0, "down");
 		this.gp = gp;
 		this.kh = kh;
@@ -62,14 +67,14 @@ public class Player extends Character {
 
 	public void getPlayerImage() {
 		try {
-			up1 = ImageIO.read(getClass().getResourceAsStream("player/link_up1.png"));
-			up2 = ImageIO.read(getClass().getResourceAsStream("/link_up2.png"));
-			down1 = ImageIO.read(getClass().getResourceAsStream("/link_down1.png"));
-			down2 = ImageIO.read(getClass().getResourceAsStream("/link_down2.png"));
-			left1 = ImageIO.read(getClass().getResourceAsStream("/link_left1.png"));
-			left2 = ImageIO.read(getClass().getResourceAsStream("/link_left2.png"));
-			right1 = ImageIO.read(getClass().getResourceAsStream("/link_right1.png"));
-			right2 = ImageIO.read(getClass().getResourceAsStream("/link_right2.png"));
+			up1 = ImageIO.read(new FileInputStream("src/assets/link_up1.png"));
+			up2 = ImageIO.read(new FileInputStream("src/assets/link_up2.png"));
+			down1 = ImageIO.read(new FileInputStream("src/assets/link_down1.png"));
+			down2 = ImageIO.read(new FileInputStream("src/assets/link_down2.png"));
+			left1 = ImageIO.read(new FileInputStream("src/assets/link_left1.png"));
+			left2 = ImageIO.read(new FileInputStream("src/assets/link_left2.png"));
+			right1 = ImageIO.read(new FileInputStream("src/assets/link_right1.png"));
+			right2 = ImageIO.read(new FileInputStream("src/assets/link_right2.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
