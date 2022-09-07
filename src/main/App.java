@@ -10,7 +10,6 @@ import javax.swing.JFrame;
 import entities.Player;
 import handlers.KeyHandler;
 import java.io.IOException;
-import java.sql.Array;
 import java.io.File; // Import the File class
 import java.io.FileInputStream;
 import java.io.FileNotFoundException; // Import this class to handle errors
@@ -25,8 +24,8 @@ public class App extends Canvas implements Runnable {
 	private Thread thread;
 	private boolean isRunning;
 	private final short SCALE = 1;
-	private final short WIDTH = 960;
-	private final short HEIGHT = 720;
+	private final short WIDTH = 240;
+	private final short HEIGHT = 240;
 	public final short originalTileSize = 16;
 	public final short tileSize = originalTileSize * SCALE;
 	private KeyHandler keyHandler;
