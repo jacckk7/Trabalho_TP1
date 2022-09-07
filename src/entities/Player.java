@@ -1,4 +1,5 @@
 package entities;
+
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
@@ -15,7 +16,7 @@ public class Player extends Character {
 	public BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
 
 	public Player(App gp, KeyHandler kh) {
-		super(0, 0, 4.0, "down");
+		super(0, 130, 4.0, "down");
 		this.gp = gp;
 		this.kh = kh;
 		this.direction = "down";
@@ -24,36 +25,70 @@ public class Player extends Character {
 
 	public void update() {
 		if (kh.upPressed) {
-			positionY -= speed;
-			direction="up";
-			return;
+			int nextY = (int) Math.floor((positionY - speed) / 16);
+			int nextX = (int) (positionX / 16);
+
+			System.out.println("nextX: " + nextX);
+			System.out.println("nextY: "+ nextY);
+
+			if (gp.checkMapPosition(nextX, nextY) == 1) {
+				positionY -= speed;
+				direction = "up";
+				return;
+			}
 		}
 		if (kh.downPressed) {
-			positionY += speed;
-			direction="down";
-			return;
+			int nextY = (int) Math.ceil((positionY + speed) / 16);
+			int nextX = (int) (positionX / 16);
+
+			System.out.println("nextX: " + nextX);
+			System.out.println("nextY: "+ nextY);
+
+			if (gp.checkMapPosition(nextX, nextY) == 1) {
+				positionY += speed;
+				direction = "down";
+				return;
+			}
+
 		}
 		if (kh.leftPressed) {
-			positionX -= speed;
-			direction="left";
-			return;
+			int nextY = (int) (positionY/16);
+			int nextX = (int) Math.floor( (positionX -speed)/ 16);
+
+			System.out.println("nextX: " + nextX);
+			System.out.println("nextY: "+ nextY);
+
+			if (gp.checkMapPosition(nextX, nextY) == 1) {
+				positionX -= speed;
+				direction = "left";
+				return;
+			}
 		}
 		if (kh.rightPressed) {
-			positionX += speed;
-			direction="right";
-			return;
+			int nextY = (int) (positionY/16);
+			int nextX = (int) Math.ceil( (positionX +speed)/ 16);
+
+			System.out.println("nextX: " + nextX);
+			System.out.println("nextY: "+ nextY);
+
+			if (gp.checkMapPosition(nextX, nextY) == 1) {
+				positionX += speed;
+				direction = "right";
+				return;
+			}
 		}
 	}
 
 	public void draw(Graphics g) {
-		BufferedImage image= null;;
+		BufferedImage image = null;
+		;
 
-		switch(direction){
+		switch (direction) {
 			case "up":
-				image=up1;
+				image = up1;
 				break;
 			case "down":
-				image=down1;
+				image = down1;
 				break;
 			case "right":
 				image = right1;
@@ -62,7 +97,7 @@ public class Player extends Character {
 				image = left1;
 				break;
 		}
-		g.drawImage(image, positionX, positionY, gp.tileSize,gp.tileSize,null);
+		g.drawImage(image, positionX, positionY, gp.tileSize, gp.tileSize, null);
 	}
 
 	public void getPlayerImage() {

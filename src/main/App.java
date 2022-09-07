@@ -120,6 +120,10 @@ public class App extends Canvas implements Runnable {
 
 		stop();
 	}
+
+	public int checkMapPosition(int line,int column){
+		return tm.mapTiles[line][column];
+	}
 }
 
 class TileManager {
