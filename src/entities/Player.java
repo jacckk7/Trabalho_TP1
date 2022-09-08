@@ -65,7 +65,7 @@ public class Player extends Character {
 			}
 		}
 		if (kh.rightPressed) {
-			int nextY = (int) (positionY/16);
+			int nextY = (int) Math.floor(positionY/16);
 			int nextX = (int) Math.ceil( (positionX +speed)/ 16);
 
 			System.out.println("nextX: " + nextX);
@@ -81,7 +81,6 @@ public class Player extends Character {
 
 	public void draw(Graphics g) {
 		BufferedImage image = null;
-		;
 
 		switch (direction) {
 			case "up":
@@ -98,6 +97,7 @@ public class Player extends Character {
 				break;
 		}
 		g.drawImage(image, positionX, positionY, gp.tileSize, gp.tileSize, null);
+
 	}
 
 	public void getPlayerImage() {

@@ -39,7 +39,6 @@ public class App extends Canvas implements Runnable {
 		this.addKeyListener(keyHandler);
 		player = new Player(this, keyHandler);
 		tm = new TileManager(this);
-		tm.getMap();
 	}
 
 	public void initFrame() {
@@ -122,21 +121,112 @@ public class App extends Canvas implements Runnable {
 	}
 
 	public int checkMapPosition(int line,int column){
-		return tm.mapTiles[line][column];
+		if(line<0 || line>15 ||column<0 || column>15){
+			return -1;
+		}
+		return tm.currentMap.mapTiles[line][column];
 	}
 }
 
 class TileManager {
-	int[][] mapTiles = new int[15][16];
+	Map currentMap;
 	App gp;
 
 	public TileManager(App App) {
 		this.gp = App;
+		currentMap = new Map();
+		currentMap.setMap(new File("src/assets/maps/mapTopRight.txt"));
+
 	}
 
-	public void getMap() {
+
+
+	public void drawMap(Graphics g) {
+		for (int line = 0; line < 15; line++) {
+			for (int col = 0; col < 16; col++) {
+				try {
+					BufferedImage image = null;
+					if (currentMap.mapTiles[line][col] == 0) {
+						image =ImageIO.read(new FileInputStream("src/assets/bush.png"));
+					} else if (currentMap.mapTiles[line][col] == 1) {
+						image = ImageIO.read(new FileInputStream("src/assets/sand.png"));
+					}
+					g.drawImage(image, 16 * col, 16 * line, gp.tileSize, gp.tileSize, null);
+
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+}
+
+class Map{
+	int[][] mapTiles = new int[15][16];
+	Map above;
+	Map besideLeft;
+	Map below;
+	Map besideRight;
+	
+
+
+	public Map(int[][] mapTiles, Map above, Map besideLeft, Map below, Map besideRight) {
+		this.mapTiles = mapTiles;
+		this.above = above;
+		this.besideLeft = besideLeft;
+		this.below = below;
+		this.besideRight = besideRight;
+	}
+
+
+	public Map() {
+	}
+
+
+	public int[][] getMapTiles() {
+		return this.mapTiles;
+	}
+
+	public void setMapTiles(int[][] mapTiles) {
+		this.mapTiles = mapTiles;
+	}
+
+	public Map getAbove() {
+		return this.above;
+	}
+
+	public void setAbove(Map above) {
+		this.above = above;
+	}
+
+	public Map getBesideLeft() {
+		return this.besideLeft;
+	}
+
+	public void setBesideLeft(Map besideLeft) {
+		this.besideLeft = besideLeft;
+	}
+
+	public Map getBelow() {
+		return this.below;
+	}
+
+	public void setBelow(Map below) {
+		this.below = below;
+	}
+
+	public Map getBesideRight() {
+		return this.besideRight;
+	}
+
+	public void setBesideRight(Map besideRight) {
+		this.besideRight = besideRight;
+	}
+
+
+
+	public void setMap(File map ) {
 		try {
-			File map = new File("src/assets/map.txt");
 			Scanner reader = new Scanner(map);
 			int line = 0;
 			while (reader.hasNextLine()) {
@@ -165,22 +255,4 @@ class TileManager {
 
 	}
 
-	public void drawMap(Graphics g) {
-		for (int line = 0; line < 15; line++) {
-			for (int col = 0; col < 16; col++) {
-				try {
-					BufferedImage image = null;
-					if (mapTiles[line][col] == 0) {
-						image =ImageIO.read(new FileInputStream("src/assets/bush.png"));
-					} else if (mapTiles[line][col] == 1) {
-						image = ImageIO.read(new FileInputStream("src/assets/sand.png"));
-					}
-					g.drawImage(image, 16 * line, 16 * col, gp.tileSize, gp.tileSize, null);
-
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-	}
-}
+};
