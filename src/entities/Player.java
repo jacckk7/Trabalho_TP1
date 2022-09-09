@@ -31,7 +31,7 @@ public class Player extends Character {
 			System.out.println("nextX: " + nextX);
 			System.out.println("nextY: "+ nextY);
 
-			if (gp.checkMapPosition(nextX, nextY) == 1) {
+			if (gp.checkMapPosition(nextY, nextX) == 1) {
 				positionY -= speed;
 				direction = "up";
 				return;
@@ -44,7 +44,7 @@ public class Player extends Character {
 			System.out.println("nextX: " + nextX);
 			System.out.println("nextY: "+ nextY);
 
-			if (gp.checkMapPosition(nextX, nextY) == 1) {
+			if (gp.checkMapPosition(nextY, nextX) == 1) {
 				positionY += speed;
 				direction = "down";
 				return;
@@ -58,7 +58,7 @@ public class Player extends Character {
 			System.out.println("nextX: " + nextX);
 			System.out.println("nextY: "+ nextY);
 
-			if (gp.checkMapPosition(nextX, nextY) == 1) {
+			if (gp.checkMapPosition(nextY, nextX) == 1) {
 				positionX -= speed;
 				direction = "left";
 				return;
@@ -71,7 +71,7 @@ public class Player extends Character {
 			System.out.println("nextX: " + nextX);
 			System.out.println("nextY: "+ nextY);
 
-			if (gp.checkMapPosition(nextX, nextY) == 1) {
+			if (gp.checkMapPosition(nextY, nextX) == 1) {
 				positionX += speed;
 				direction = "right";
 				return;
