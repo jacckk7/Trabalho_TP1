@@ -31,7 +31,7 @@ public class Player extends Character {
 			System.out.println("nextX: " + nextX);
 			System.out.println("nextY: "+ nextY);
 
-			if (gp.checkMapPosition(nextX, nextY) == 1) {
+			if (gp.checkMapPosition(nextY, nextX) == 1) {
 				positionY -= speed;
 				direction = "up";
 				return;
@@ -44,7 +44,7 @@ public class Player extends Character {
 			System.out.println("nextX: " + nextX);
 			System.out.println("nextY: "+ nextY);
 
-			if (gp.checkMapPosition(nextX, nextY) == 1) {
+			if (gp.checkMapPosition(nextY, nextX) == 1) {
 				positionY += speed;
 				direction = "down";
 				return;
@@ -58,20 +58,20 @@ public class Player extends Character {
 			System.out.println("nextX: " + nextX);
 			System.out.println("nextY: "+ nextY);
 
-			if (gp.checkMapPosition(nextX, nextY) == 1) {
+			if (gp.checkMapPosition(nextY, nextX) == 1) {
 				positionX -= speed;
 				direction = "left";
 				return;
 			}
 		}
 		if (kh.rightPressed) {
-			int nextY = (int) (positionY/16);
+			int nextY = (int) Math.floor(positionY/16);
 			int nextX = (int) Math.ceil( (positionX +speed)/ 16);
 
 			System.out.println("nextX: " + nextX);
 			System.out.println("nextY: "+ nextY);
 
-			if (gp.checkMapPosition(nextX, nextY) == 1) {
+			if (gp.checkMapPosition(nextY, nextX) == 1) {
 				positionX += speed;
 				direction = "right";
 				return;
@@ -81,7 +81,6 @@ public class Player extends Character {
 
 	public void draw(Graphics g) {
 		BufferedImage image = null;
-		;
 
 		switch (direction) {
 			case "up":
@@ -98,6 +97,7 @@ public class Player extends Character {
 				break;
 		}
 		g.drawImage(image, positionX, positionY, gp.tileSize, gp.tileSize, null);
+
 	}
 
 	public void getPlayerImage() {

@@ -4,19 +4,10 @@ import java.awt.Canvas;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
-import java.awt.image.BufferedImage;
-import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import entities.Player;
 import handlers.KeyHandler;
-import java.io.IOException;
-import java.io.File; // Import the File class
-import java.io.FileInputStream;
-import java.io.FileNotFoundException; // Import this class to handle errors
-import java.util.ArrayList;
-import java.util.Scanner; // Import the Scanner class to read text files
-// import java.awt.Color;
-// import java.awt.Font; -> se for imprimir textos na tela
+import maps.TileManager;
 
 public class App extends Canvas implements Runnable {
 
@@ -24,7 +15,7 @@ public class App extends Canvas implements Runnable {
 	private Thread thread;
 	private boolean isRunning;
 	private final short SCALE = 1;
-	private final short WIDTH = 240;
+	private final short WIDTH = 256;
 	private final short HEIGHT = 240;
 	public final short originalTileSize = 16;
 	public final short tileSize = originalTileSize * SCALE;
@@ -39,7 +30,7 @@ public class App extends Canvas implements Runnable {
 		this.addKeyListener(keyHandler);
 		player = new Player(this, keyHandler);
 		tm = new TileManager(this);
-		tm.getMap();
+		System.out.println(tm.getCurrentMap());
 	}
 
 	public void initFrame() {
@@ -121,66 +112,36 @@ public class App extends Canvas implements Runnable {
 		stop();
 	}
 
-	public int checkMapPosition(int line,int column){
-		return tm.mapTiles[line][column];
-	}
-}
-
-class TileManager {
-	int[][] mapTiles = new int[15][16];
-	App gp;
-
-	public TileManager(App App) {
-		this.gp = App;
-	}
-
-	public void getMap() {
-		try {
-			File map = new File("src/assets/map.txt");
-			Scanner reader = new Scanner(map);
-			int line = 0;
-			while (reader.hasNextLine()) {
-				String rawData = reader.nextLine();
-
-				String charData[] = rawData.split(" ");
-
-				ArrayList<Integer> codeArray = new ArrayList<Integer>();
-
-				for (String c : charData) {
-					codeArray.add(Integer.parseInt(c));
-				}
-
-				int column = 0;
-
-				for (int c : codeArray) {
-					mapTiles[line][column] = c;
-					column++;
-				}
-				line++;
-			}
-			reader.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+	public int checkMapPosition(int line, int column) {
+		if (line < 0) {
+			tm.changeMap("above");
+			System.out.println("Map changed:");
+			System.out.println(tm.getCurrentMap());
+			player.setPositionY(224);
+			return 1;
 		}
-
-	}
-
-	public void drawMap(Graphics g) {
-		for (int line = 0; line < 15; line++) {
-			for (int col = 0; col < 16; col++) {
-				try {
-					BufferedImage image = null;
-					if (mapTiles[line][col] == 0) {
-						image =ImageIO.read(new FileInputStream("src/assets/bush.png"));
-					} else if (mapTiles[line][col] == 1) {
-						image = ImageIO.read(new FileInputStream("src/assets/sand.png"));
-					}
-					g.drawImage(image, 16 * line, 16 * col, gp.tileSize, gp.tileSize, null);
-
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
+		if (column < 0) {
+			tm.changeMap("besideLeft");
+			System.out.println("Map changed:");
+			System.out.println(tm.getCurrentMap());
+			player.setPositionX(224);
+			return 1;
 		}
+		if (line > 14) {
+			tm.changeMap("below");
+			System.out.println("Map changed:");
+			System.out.println(tm.getCurrentMap());
+			player.setPositionY(0);
+			return 1;
+		}
+		if (column > 15) {
+			tm.changeMap("besideRight");
+			System.out.println("Map changed:");
+			System.out.println(tm.getCurrentMap());
+			player.setPositionX(0);
+			return 1;
+		}
+		return tm.getCurrentMap().mapTiles[line][column];
 	}
+
 }

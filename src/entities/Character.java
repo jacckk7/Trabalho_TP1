@@ -1,6 +1,6 @@
 package entities;
 
-class Character {
+public class Character {
 	public int life;
 	public int positionX;
 	public int positionY;
@@ -13,6 +13,55 @@ class Character {
 		this.positionY = positionY;
 		this.speed = speed;
 		this.direction = direction;
+	}
+
+
+	public int getLife() {
+		return this.life;
+	}
+
+	public void setLife(int life) {
+		this.life = life;
+	}
+
+	public int getPositionX() {
+		return this.positionX;
+	}
+
+	public void setPositionX(int positionX) {
+		this.positionX = positionX;
+	}
+
+	public int getPositionY() {
+		return this.positionY;
+	}
+
+	public void setPositionY(int positionY) {
+		this.positionY = positionY;
+	}
+
+	public double getSpeed() {
+		return this.speed;
+	}
+
+	public void setSpeed(double speed) {
+		this.speed = speed;
+	}
+
+	public String getDirection() {
+		return this.direction;
+	}
+
+	public void setDirection(String direction) {
+		this.direction = direction;
+	}
+
+	public int getScoreForKilling() {
+		return this.scoreForKilling;
+	}
+
+	public void setScoreForKilling(int scoreForKilling) {
+		this.scoreForKilling = scoreForKilling;
 	}
 
 }
