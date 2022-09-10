@@ -13,7 +13,8 @@ import java.io.IOException;
 public class Player extends Character {
 	App gp;
 	KeyHandler kh;
-	public BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
+	public BufferedImage up1, up2, down1, down2, left1, left2, right1, right2,
+			attackUp1, attackUp2, attackDown1, attackDown2, attackLeft1, attackLeft2, attackRight1, attackRight2;
 
 	public Player(App gp, KeyHandler kh) {
 		super(0, 130, 4.0, "down");
@@ -106,7 +107,7 @@ public class Player extends Character {
 				break;
 			case "down":
 				if (sprinteNum == 1) {
-					image =down2;
+					image = down2;
 				}
 				if (sprinteNum == 2) {
 					image = down1;
@@ -143,6 +144,14 @@ public class Player extends Character {
 			left2 = ImageIO.read(new FileInputStream("src/assets/link_left2.png"));
 			right1 = ImageIO.read(new FileInputStream("src/assets/link_right1.png"));
 			right2 = ImageIO.read(new FileInputStream("src/assets/link_right2.png"));
+			attackUp1 = ImageIO.read(new FileInputStream("src/assets/link_attack_up1.png"));
+			attackUp2 = ImageIO.read(new FileInputStream("src/assets/link_attack_up2.png"));
+			attackDown1 = ImageIO.read(new FileInputStream("src/assets/link_attack_down1.png"));
+			attackDown2 = ImageIO.read(new FileInputStream("src/assets/link_attack_down2.png"));
+			attackLeft1 = ImageIO.read(new FileInputStream("src/assets/link_attack_left1.png"));
+			attackLeft2 = ImageIO.read(new FileInputStream("src/assets/link_attack_left2.png"));
+			attackRight1 = ImageIO.read(new FileInputStream("src/assets/link_attack_right1.png"));
+			attackRight2 = ImageIO.read(new FileInputStream("src/assets/link_attack_right2.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
