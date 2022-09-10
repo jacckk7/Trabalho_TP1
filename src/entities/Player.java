@@ -24,12 +24,25 @@ public class Player extends Character {
 	}
 
 	public void update() {
+
+		if (kh.upPressed || kh.leftPressed || kh.rightPressed || kh.downPressed) {
+			spriteCounter++;
+
+			if (spriteCounter > 1) {
+				if (sprinteNum == 1) {
+					sprinteNum = 2;
+				} else if (sprinteNum == 2) {
+					sprinteNum = 1;
+				}
+				spriteCounter = 0;
+			}
+		}
 		if (kh.upPressed) {
 			int nextY = (int) Math.floor((positionY - speed) / 16);
 			int nextX = (int) (positionX / 16);
 
 			System.out.println("nextX: " + nextX);
-			System.out.println("nextY: "+ nextY);
+			System.out.println("nextY: " + nextY);
 
 			if (gp.checkMapPosition(nextY, nextX) == 1) {
 				positionY -= speed;
@@ -42,7 +55,7 @@ public class Player extends Character {
 			int nextX = (int) (positionX / 16);
 
 			System.out.println("nextX: " + nextX);
-			System.out.println("nextY: "+ nextY);
+			System.out.println("nextY: " + nextY);
 
 			if (gp.checkMapPosition(nextY, nextX) == 1) {
 				positionY += speed;
@@ -52,11 +65,11 @@ public class Player extends Character {
 
 		}
 		if (kh.leftPressed) {
-			int nextY = (int) (positionY/16);
-			int nextX = (int) Math.floor( (positionX -speed)/ 16);
+			int nextY = (int) (positionY / 16);
+			int nextX = (int) Math.floor((positionX - speed) / 16);
 
 			System.out.println("nextX: " + nextX);
-			System.out.println("nextY: "+ nextY);
+			System.out.println("nextY: " + nextY);
 
 			if (gp.checkMapPosition(nextY, nextX) == 1) {
 				positionX -= speed;
@@ -65,11 +78,11 @@ public class Player extends Character {
 			}
 		}
 		if (kh.rightPressed) {
-			int nextY = (int) Math.floor(positionY/16);
-			int nextX = (int) Math.ceil( (positionX +speed)/ 16);
+			int nextY = (int) Math.floor(positionY / 16);
+			int nextX = (int) Math.ceil((positionX + speed) / 16);
 
 			System.out.println("nextX: " + nextX);
-			System.out.println("nextY: "+ nextY);
+			System.out.println("nextY: " + nextY);
 
 			if (gp.checkMapPosition(nextY, nextX) == 1) {
 				positionX += speed;
@@ -84,16 +97,36 @@ public class Player extends Character {
 
 		switch (direction) {
 			case "up":
-				image = up1;
+				if (sprinteNum == 1) {
+					image = up2;
+				}
+				if (sprinteNum == 2) {
+					image = up1;
+				}
 				break;
 			case "down":
-				image = down1;
+				if (sprinteNum == 1) {
+					image =down2;
+				}
+				if (sprinteNum == 2) {
+					image = down1;
+				}
 				break;
 			case "right":
-				image = right1;
+				if (sprinteNum == 1) {
+					image = right2;
+				}
+				if (sprinteNum == 2) {
+					image = right1;
+				}
 				break;
 			case "left":
-				image = left1;
+				if (sprinteNum == 1) {
+					image = left2;
+				}
+				if (sprinteNum == 2) {
+					image = left1;
+				}
 				break;
 		}
 		g.drawImage(image, positionX, positionY, gp.tileSize, gp.tileSize, null);
