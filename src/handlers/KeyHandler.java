@@ -3,10 +3,9 @@ package handlers;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-public class KeyHandler implements KeyListener { // coloquei aqui porque estav tendo erro "cant find symbol" quando declarava
-											// em outro arquivo
+public class KeyHandler implements KeyListener { 
 
-	public boolean upPressed, downPressed, leftPressed, rightPressed;
+	public boolean upPressed, downPressed, leftPressed, rightPressed, kPressed;
 
 	public KeyHandler() {
 	}
@@ -31,6 +30,9 @@ public class KeyHandler implements KeyListener { // coloquei aqui porque estav t
 			case KeyEvent.VK_D:
 				rightPressed = true;
 				break;
+			case KeyEvent.VK_K:
+				kPressed = true;
+				break;
 		}
 
 	}
@@ -50,6 +52,9 @@ public class KeyHandler implements KeyListener { // coloquei aqui porque estav t
 				break;
 			case KeyEvent.VK_D:
 				rightPressed = false;
+				break;
+			case KeyEvent.VK_K:
+				kPressed = false;
 				break;
 		}
 	}

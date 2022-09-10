@@ -15,18 +15,21 @@ public class Player extends Character {
 	KeyHandler kh;
 	public BufferedImage up1, up2, down1, down2, left1, left2, right1, right2,
 			attackUp1, attackUp2, attackDown1, attackDown2, attackLeft1, attackLeft2, attackRight1, attackRight2;
+	public boolean isAttacking;
+	public int attackSpriteCounter;
 
 	public Player(App gp, KeyHandler kh) {
 		super(0, 130, 4.0, "down");
 		this.gp = gp;
 		this.kh = kh;
 		this.direction = "down";
+		this.isAttacking = false;
 		getPlayerImage();
 	}
 
 	public void update() {
 
-		if (kh.upPressed || kh.leftPressed || kh.rightPressed || kh.downPressed) {
+		if (kh.upPressed || kh.leftPressed || kh.rightPressed || kh.downPressed || kh.kPressed) {
 			spriteCounter++;
 
 			if (spriteCounter > 1) {
@@ -44,6 +47,7 @@ public class Player extends Character {
 
 			System.out.println("nextX: " + nextX);
 			System.out.println("nextY: " + nextY);
+			isAttacking = false;
 
 			if (gp.checkMapPosition(nextY, nextX) == 1) {
 				positionY -= speed;
@@ -57,6 +61,7 @@ public class Player extends Character {
 
 			System.out.println("nextX: " + nextX);
 			System.out.println("nextY: " + nextY);
+			isAttacking = false;
 
 			if (gp.checkMapPosition(nextY, nextX) == 1) {
 				positionY += speed;
@@ -71,6 +76,7 @@ public class Player extends Character {
 
 			System.out.println("nextX: " + nextX);
 			System.out.println("nextY: " + nextY);
+			isAttacking = false;
 
 			if (gp.checkMapPosition(nextY, nextX) == 1) {
 				positionX -= speed;
@@ -84,13 +90,18 @@ public class Player extends Character {
 
 			System.out.println("nextX: " + nextX);
 			System.out.println("nextY: " + nextY);
-
+			isAttacking = false;
 			if (gp.checkMapPosition(nextY, nextX) == 1) {
 				positionX += speed;
 				direction = "right";
 				return;
 			}
 		}
+
+		if (kh.kPressed) {
+			isAttacking = true;
+		}
+
 	}
 
 	public void draw(Graphics g) {
@@ -98,39 +109,124 @@ public class Player extends Character {
 
 		switch (direction) {
 			case "up":
-				if (sprinteNum == 1) {
-					image = up2;
+				if (isAttacking) {
+					if (attackSpriteCounter == 0) {
+						image = attackUp1;
+						g.drawImage(image, positionX, positionY - 12, null);
+						attackSpriteCounter++;
+						return;
+					}
+					if (attackSpriteCounter == 1) {
+						image = attackUp2;
+						g.drawImage(image, positionX, positionY - 5, null);
+						attackSpriteCounter++;
+						return;
+					}
+					if (attackSpriteCounter >= 2) {
+						isAttacking = false;
+						attackSpriteCounter = 0;
+					}
 				}
-				if (sprinteNum == 2) {
-					image = up1;
+
+				if (!isAttacking) {
+					if (sprinteNum == 1) {
+						image = up2;
+					}
+					if (sprinteNum == 2) {
+						image = up1;
+					}
 				}
 				break;
+
 			case "down":
-				if (sprinteNum == 1) {
-					image = down2;
+				if (isAttacking) {
+					if (attackSpriteCounter == 0) {
+						image = attackDown1;
+						g.drawImage(image, positionX, positionY, null);
+						attackSpriteCounter++;
+						return;
+					}
+					if (attackSpriteCounter == 1) {
+						image = attackDown2;
+						g.drawImage(image, positionX, positionY, null);
+						attackSpriteCounter++;
+						return;
+					}
+					if (attackSpriteCounter >= 2) {
+						isAttacking = false;
+						attackSpriteCounter = 0;
+					}
 				}
-				if (sprinteNum == 2) {
-					image = down1;
+
+				if (!isAttacking) {
+					if (sprinteNum == 1) {
+						image = down2;
+					}
+					if (sprinteNum == 2) {
+						image = down1;
+					}
 				}
+
 				break;
 			case "right":
-				if (sprinteNum == 1) {
-					image = right2;
+				if (isAttacking) {
+					if (attackSpriteCounter == 0) {
+						image = attackRight1;
+						g.drawImage(image, positionX, positionY, null);
+						attackSpriteCounter++;
+						return;
+					}
+					if (attackSpriteCounter == 1) {
+						image = attackRight2;
+						g.drawImage(image, positionX, positionY, null);
+						attackSpriteCounter++;
+						return;
+					}
+					if (attackSpriteCounter >= 2) {
+						isAttacking = false;
+						attackSpriteCounter = 0;
+					}
 				}
-				if (sprinteNum == 2) {
-					image = right1;
+				if (!isAttacking) {
+					if (sprinteNum == 1) {
+						image = right2;
+					}
+					if (sprinteNum == 2) {
+						image = right1;
+					}
 				}
 				break;
 			case "left":
-				if (sprinteNum == 1) {
-					image = left2;
+				if (isAttacking) {
+					if (attackSpriteCounter == 0) {
+						image = attackLeft1;
+						g.drawImage(image, positionX-11, positionY, null);
+						attackSpriteCounter++;
+						return;
+					}
+					if (attackSpriteCounter == 1) {
+						image = attackLeft2;
+						g.drawImage(image, positionX-3, positionY, null);
+						attackSpriteCounter++;
+						return;
+					}
+					if (attackSpriteCounter >= 2) {
+						isAttacking = false;
+						attackSpriteCounter = 0;
+					}
 				}
-				if (sprinteNum == 2) {
-					image = left1;
+
+				if (!isAttacking) {
+					if (sprinteNum == 1) {
+						image = left2;
+					}
+					if (sprinteNum == 2) {
+						image = left1;
+					}
 				}
 				break;
 		}
-		g.drawImage(image, positionX, positionY, gp.tileSize, gp.tileSize, null);
+		g.drawImage(image, positionX, positionY, null);
 
 	}
 
