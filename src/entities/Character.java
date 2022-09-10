@@ -68,4 +68,23 @@ public class Character {
 		this.scoreForKilling = scoreForKilling;
 	}
 
+	public String getInLineDirection(Character other){
+		if(other.positionY+16 >= positionY && other.positionY<=positionY+16){ // está na mesma direção horizontal
+			if(other.positionX<=positionX){
+				return "left";
+			}else{
+				return "right";
+			}
+		}else{
+			if(other.positionX+16 >= positionX && other.positionX<=positionX+16){ //está na mesma direção vertica;
+				if(other.positionY<=positionY){
+					return "up";
+				}else{
+					return "down";
+				}
+			}
+		}
+		return null;
+	}
+
 }
