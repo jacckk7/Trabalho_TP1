@@ -7,12 +7,16 @@ public class Character {
 	public double speed;
 	public String direction;
 	public int scoreForKilling;
+	public int spriteCounter;
+	public int sprinteNum;
 
 	public Character(int positionX, int positionY, double speed, String direction) {
 		this.positionX = positionX;
 		this.positionY = positionY;
 		this.speed = speed;
 		this.direction = direction;
+		this.spriteCounter=0;
+		this.sprinteNum=1;
 	}
 
 
