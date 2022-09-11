@@ -80,7 +80,7 @@ public class TileManager {
 	}
 
 	public void changeMap(String direction) {
-		switch (direction) {
+		switch (direction){
 			case "above":
 				currentMap = currentMap.getAbove();
 				break;

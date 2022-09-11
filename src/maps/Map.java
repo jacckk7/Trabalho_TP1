@@ -69,6 +69,10 @@ public class Map {
 		this.besideRight = besideRight;
 	}
 
+	public String getName() {
+		return name;
+	}
+
 	public void setMap(File map) {
 		try {
 			Scanner reader = new Scanner(map);
