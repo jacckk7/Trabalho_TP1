@@ -32,7 +32,7 @@ public class Player extends Character {
 		if (kh.upPressed || kh.leftPressed || kh.rightPressed || kh.downPressed || kh.kPressed) {
 			spriteCounter++;
 
-			if (spriteCounter > 1) {
+			if (spriteCounter > 10) {
 				if (sprinteNum == 1) {
 					sprinteNum = 2;
 				} else if (sprinteNum == 2) {
