@@ -96,6 +96,7 @@ public class App extends Canvas implements Runnable {
 		player.draw(g);
 
 		if (tm.getCurrentMap().getName().equals("Bottom Right")) {
+
 			for(EnemyMeele enemies : enemiesBottomRight) {
 				enemies.draw(g);
 			}
