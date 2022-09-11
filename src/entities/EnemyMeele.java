@@ -12,7 +12,7 @@ import main.App;
 
 public class EnemyMeele extends Character {
 
-    public BufferedImage up, down, right1, right2, left1, left2;
+    public BufferedImage up1, up2, down1, down2, right1, right2, left1, left2;
     App gp;
     Player player;
     private boolean isLinkNear = false;
@@ -37,10 +37,14 @@ public class EnemyMeele extends Character {
     public void draw(Graphics g) {
         BufferedImage image = null;
 
-        if (direction.equals("up")) {
-            image = up;
+        if (direction.equals("up") && countSprite) {
+            image = up2;
+        } else if (direction.equals("up")) {
+            image = up1;
+        } else if (direction.equals("down") && countSprite) {
+            image = down2;
         } else if (direction.equals("down")) {
-            image = down;
+            image = down1;
         } else if (direction.equals("right") && countSprite) {
             image = right2;
         } else if (direction.equals("right")) {
@@ -60,13 +64,17 @@ public class EnemyMeele extends Character {
                 if (positionY == initial_positionY - 64 && direction.equals("up")) {
                     direction = "down";
                     positionY += (int)speed;
+                    countSprite = false;
                 } else if (direction.equals("up")) {
                     positionY -= (int)speed;
+                    countSprite = !countSprite;
                 } else if (positionY == initial_positionY && direction.equals("down")) {
                     direction = "up";
                     positionY -= (int)speed;
+                    countSprite = false;
                 } else if (direction.equals("down")) {
                     positionY += (int)speed;
+                    countSprite = !countSprite;
                 }
             } else if (movement.equals("horizontal")) {
                 if (positionX == initial_positionX + 64 && direction.equals("right")) {
@@ -88,9 +96,11 @@ public class EnemyMeele extends Character {
         } else {
             if (positionY < player.getPositionY() && gp.checkMapPosition((int) (positionX / 16), (int) (Math.ceil((positionY + speed) / 16))) == 1 && !isColliding(positionX, (int) (positionY + speed))) {
                 positionY += (int)speed;
+                countSprite = !countSprite;
                 direction = "down";
             } else if (positionY > player.getPositionY() && gp.checkMapPosition((int) (positionX /16), (int) (Math.floor((positionY - speed) / 16))) == 1 && !isColliding(positionX, (int) (positionY - speed))) {
                 positionY -= (int)speed;
+                countSprite = !countSprite;
                 direction = "up";
             }
             
@@ -129,8 +139,10 @@ public class EnemyMeele extends Character {
 
     public void getMeeleEnemyImage() {
 		try {
-			up = ImageIO.read(new FileInputStream("src/assets/meele_enemy_up.png"));
-			down = ImageIO.read(new FileInputStream("src/assets/meele_enemy_down.png"));
+			up1 = ImageIO.read(new FileInputStream("src/assets/meele_enemy_up1.png"));
+            up2 = ImageIO.read(new FileInputStream("src/assets/meele_enemy_up2.png"));
+			down1 = ImageIO.read(new FileInputStream("src/assets/meele_enemy_down1.png"));
+            down2 = ImageIO.read(new FileInputStream("src/assets/meele_enemy_down2.png"));
 			left1 = ImageIO.read(new FileInputStream("src/assets/meele_enemy_left1.png"));
 			left2 = ImageIO.read(new FileInputStream("src/assets/meele_enemy_left2.png"));
 			right1 = ImageIO.read(new FileInputStream("src/assets/meele_enemy_right1.png"));
