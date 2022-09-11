@@ -45,7 +45,7 @@ public class Player extends Character {
 			int nextY = (int) Math.floor((positionY - speed) / 16);
 			int nextX = (int) (positionX / 16);
 
-			boolean needsToCheckNext = ((positionX % 16 == 12) || (positionX % 16 == 8));
+			boolean needsToCheckNext = (positionX % 16 >= 8);
 
 			isAttacking = false;
 
@@ -54,7 +54,7 @@ public class Player extends Character {
 					positionY -= speed;
 				}
 			} else {
-				if (gp.checkMapPosition(nextY, nextX) == 1 && gp.checkMapPosition(nextY, nextX + 1) == 1) {
+				if (gp.checkMapPosition(nextY, nextX + 1) == 1) {
 					positionY -= speed;
 				}
 			}
@@ -65,10 +65,7 @@ public class Player extends Character {
 			int nextY = (int) Math.ceil((positionY + speed) / 16);
 			int nextX = (int) (positionX / 16);
 
-			boolean needsToCheckNext = ((positionX % 16 == 12) || (positionX % 16 == 8));
-
-			System.out.println("PositionX: "+positionX);
-			System.out.println("PositionY: "+positionY);
+			boolean needsToCheckNext = (positionX% 16 >= 8);
 
 			isAttacking = false;
 
@@ -77,7 +74,7 @@ public class Player extends Character {
 					positionY += speed;
 				}
 			} else {
-				if (gp.checkMapPosition(nextY, nextX) == 1 && gp.checkMapPosition(nextY, nextX + 1) == 1) {
+				if (gp.checkMapPosition(nextY, nextX+1) == 1) {
 					positionY += speed;
 				}
 			}
@@ -88,26 +85,43 @@ public class Player extends Character {
 			int nextY = (int) (positionY / 16);
 			int nextX = (int) Math.floor((positionX - speed) / 16);
 
+			boolean needsToCheckNext = (positionY% 16 >= 10);
+
 			isAttacking = false;
 
-			if (gp.checkMapPosition(nextY, nextX) == 1) {
-				positionX -= speed;
+			if (!needsToCheckNext) {
+				if (gp.checkMapPosition(nextY, nextX) == 1) {
+					positionX -= speed;
+				}
+			} else {
+				if (gp.checkMapPosition(nextY+1, nextX) == 1) {
+					positionX -= speed;
+				}
 			}
-
 			direction = "left";
 			return;
 		}
 
 		if (kh.rightPressed) {
-			int nextY = (int) Math.floor(positionY / 16);
+			int nextY = (int) (positionY / 16);
 			int nextX = (int) Math.ceil((positionX + speed) / 16);
-
 			isAttacking = false;
-			if (gp.checkMapPosition(nextY, nextX) == 1) {
-				positionX += speed;
-				direction = "right";
-				return;
+
+			boolean needsToCheckNext = (positionY% 16 >= 10);
+	
+			isAttacking = false;
+
+			if (!needsToCheckNext) {
+				if (gp.checkMapPosition(nextY, nextX) == 1) {
+					positionX += speed;
+				}
+			} else {
+				if (gp.checkMapPosition(nextY+1, nextX) == 1) {
+					positionX += speed;
+				}
 			}
+			direction = "right";
+			return;
 		}
 
 		if (kh.kPressed) {
