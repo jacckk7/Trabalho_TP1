@@ -192,13 +192,13 @@ public class Player extends Character {
 				if (isAttacking) {
 					if (attackSpriteCounter == 0) {
 						image = attackLeft1;
-						g.drawImage(image, positionX-11, positionY, null);
+						g.drawImage(image, positionX - 11, positionY, null);
 						attackSpriteCounter++;
 						return;
 					}
 					if (attackSpriteCounter == 1) {
 						image = attackLeft2;
-						g.drawImage(image, positionX-3, positionY, null);
+						g.drawImage(image, positionX - 3, positionY, null);
 						attackSpriteCounter++;
 						return;
 					}
