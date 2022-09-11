@@ -45,8 +45,6 @@ public class Player extends Character {
 			int nextY = (int) Math.floor((positionY - speed) / 16);
 			int nextX = (int) (positionX / 16);
 
-			System.out.println("nextX: " + nextX);
-			System.out.println("nextY: " + nextY);
 			isAttacking = false;
 
 			if (gp.checkMapPosition(nextY, nextX) == 1) {
@@ -59,8 +57,6 @@ public class Player extends Character {
 			int nextY = (int) Math.ceil((positionY + speed) / 16);
 			int nextX = (int) (positionX / 16);
 
-			System.out.println("nextX: " + nextX);
-			System.out.println("nextY: " + nextY);
 			isAttacking = false;
 
 			if (gp.checkMapPosition(nextY, nextX) == 1) {
@@ -74,8 +70,6 @@ public class Player extends Character {
 			int nextY = (int) (positionY / 16);
 			int nextX = (int) Math.floor((positionX - speed) / 16);
 
-			System.out.println("nextX: " + nextX);
-			System.out.println("nextY: " + nextY);
 			isAttacking = false;
 
 			if (gp.checkMapPosition(nextY, nextX) == 1) {
@@ -88,8 +82,6 @@ public class Player extends Character {
 			int nextY = (int) Math.floor(positionY / 16);
 			int nextX = (int) Math.ceil((positionX + speed) / 16);
 
-			System.out.println("nextX: " + nextX);
-			System.out.println("nextY: " + nextY);
 			isAttacking = false;
 			if (gp.checkMapPosition(nextY, nextX) == 1) {
 				positionX += speed;
@@ -248,6 +240,7 @@ public class Player extends Character {
 			attackLeft2 = ImageIO.read(new FileInputStream("src/assets/link_attack_left2.png"));
 			attackRight1 = ImageIO.read(new FileInputStream("src/assets/link_attack_right1.png"));
 			attackRight2 = ImageIO.read(new FileInputStream("src/assets/link_attack_right2.png"));
+			System.out.println(up1);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

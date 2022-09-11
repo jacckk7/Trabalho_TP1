@@ -4,7 +4,11 @@ import java.awt.Canvas;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
+import java.util.ArrayList;
+
 import javax.swing.JFrame;
+
+import entities.EnemyMeele;
 import entities.Player;
 import handlers.KeyHandler;
 import maps.TileManager;
@@ -23,6 +27,8 @@ public class App extends Canvas implements Runnable {
 	Player player;
 	TileManager tm;
 
+	public static ArrayList<EnemyMeele> enemiesBottomRight;
+
 	public App() {
 		setPreferredSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));
 		initFrame();
@@ -31,6 +37,12 @@ public class App extends Canvas implements Runnable {
 		player = new Player(this, keyHandler);
 		tm = new TileManager(this);
 		System.out.println(tm.getCurrentMap());
+
+		enemiesBottomRight = new ArrayList<EnemyMeele>();
+		enemiesBottomRight.add(new EnemyMeele(192, 160, "vertical", player, this));
+		enemiesBottomRight.add(new EnemyMeele(48, 160, "vertical", player, this));
+		enemiesBottomRight.add(new EnemyMeele(80, 80, "horizontal", player, this));
+		enemiesBottomRight.add(new EnemyMeele(80, 176, "horizontal", player, this));
 	}
 
 	public void initFrame() {
@@ -65,6 +77,12 @@ public class App extends Canvas implements Runnable {
 
 	public void update() {
 		player.update();
+
+		if (tm.getCurrentMap().getName().equals("Bottom Right")) {
+			for(EnemyMeele enemies : enemiesBottomRight) {
+				enemies.update();
+			}
+		}
 	}
 
 	public void render() {
@@ -76,8 +94,16 @@ public class App extends Canvas implements Runnable {
 		Graphics g = bs.getDrawGraphics();
 		tm.drawMap(g);
 		player.draw(g);
+
+		if (tm.getCurrentMap().getName().equals("Bottom Right")) {
+			for(EnemyMeele enemies : enemiesBottomRight) {
+				enemies.draw(g);
+			}
+		}
+
 		bs.show();
 		g.dispose();
+
 	}
 
 	@Override
@@ -88,6 +114,7 @@ public class App extends Canvas implements Runnable {
 		double delta = 0;
 		int frames = 0;
 		double timer = System.currentTimeMillis();
+		requestFocus();
 
 		while (isRunning) {
 			long now = System.nanoTime();
