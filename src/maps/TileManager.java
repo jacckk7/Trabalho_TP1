@@ -6,6 +6,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.awt.Graphics;
+import java.util.ArrayList;
 import main.App;
 
 
@@ -13,8 +14,17 @@ import main.App;
 public class TileManager {
 	Map currentMap;
 	App gp;
+  ArrayList<BufferedImage> images;
 
 	public TileManager(App App) {
+    try {
+      images = new ArrayList<BufferedImage>();
+      images.add(ImageIO.read(new FileInputStream("src/assets/bush.png")));
+      images.add(ImageIO.read(new FileInputStream("src/assets/sand.png")));
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+
 		this.gp = App;
 		currentMap = new Map("Bottom left");
 		currentMap.setMap(new File("src/assets/maps/mapBottomLeft.txt"));
@@ -63,18 +73,8 @@ public class TileManager {
 	public void drawMap(Graphics g) {
 		for (int line = 0; line < 15; line++) {
 			for (int col = 0; col < 16; col++) {
-				try {
-					BufferedImage image = null;
-					if (currentMap.mapTiles[line][col] == 0) {
-						image = ImageIO.read(new FileInputStream("src/assets/bush.png"));
-					} else if (currentMap.mapTiles[line][col] == 1) {
-						image = ImageIO.read(new FileInputStream("src/assets/sand.png"));
-					}
-					g.drawImage(image, 16 * col, 16 * line, gp.tileSize, gp.tileSize, null);
-
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+        int tile = currentMap.mapTiles[line][col];
+        g.drawImage(images.get(tile), 16 * col, 16 * line, gp.tileSize, gp.tileSize, null);
 			}
 		}
 	}
