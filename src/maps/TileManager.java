@@ -9,21 +9,19 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 import main.App;
 
-
-
 public class TileManager {
 	Map currentMap;
 	App gp;
-  ArrayList<BufferedImage> images;
+	ArrayList<BufferedImage> images;
 
 	public TileManager(App App) {
-    try {
-      images = new ArrayList<BufferedImage>();
-      images.add(ImageIO.read(new FileInputStream("src/assets/bush.png")));
-      images.add(ImageIO.read(new FileInputStream("src/assets/sand.png")));
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
+		try {
+			images = new ArrayList<BufferedImage>();
+			images.add(ImageIO.read(new FileInputStream("src/assets/bush.png")));
+			images.add(ImageIO.read(new FileInputStream("src/assets/sand.png")));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 		this.gp = App;
 		currentMap = new Map("Bottom left");
@@ -52,35 +50,33 @@ public class TileManager {
 
 	}
 
+	public Map getCurrentMap() {
+		return this.currentMap;
+	}
 
-    public Map getCurrentMap() {
-        return this.currentMap;
-    }
+	public void setCurrentMap(Map currentMap) {
+		this.currentMap = currentMap;
+	}
 
-    public void setCurrentMap(Map currentMap) {
-        this.currentMap = currentMap;
-    }
+	public App getGp() {
+		return this.gp;
+	}
 
-    public App getGp() {
-        return this.gp;
-    }
-
-    public void setGp(App gp) {
-        this.gp = gp;
-    }
-
+	public void setGp(App gp) {
+		this.gp = gp;
+	}
 
 	public void drawMap(Graphics g) {
 		for (int line = 0; line < 15; line++) {
 			for (int col = 0; col < 16; col++) {
-        int tile = currentMap.mapTiles[line][col];
-        g.drawImage(images.get(tile), 16 * col, 16 * line, gp.tileSize, gp.tileSize, null);
+				int tile = currentMap.mapTiles[line][col];
+				g.drawImage(images.get(tile), 16 * col, 16 * line, gp.tileSize, gp.tileSize, null);
 			}
 		}
 	}
 
 	public void changeMap(String direction) {
-		switch (direction){
+		switch (direction) {
 			case "above":
 				currentMap = currentMap.getAbove();
 				break;
