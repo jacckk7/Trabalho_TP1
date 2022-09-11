@@ -19,7 +19,7 @@ public class Player extends Character {
 	public int attackSpriteCounter;
 
 	public Player(App gp, KeyHandler kh) {
-		super(0, 130, 4.0, "down");
+		super(16, 130, 4.0, "down");
 		this.gp = gp;
 		this.kh = kh;
 		this.direction = "down";
@@ -45,26 +45,44 @@ public class Player extends Character {
 			int nextY = (int) Math.floor((positionY - speed) / 16);
 			int nextX = (int) (positionX / 16);
 
+			boolean needsToCheckNext = ((positionX % 16 == 12) || (positionX % 16 == 8));
+
 			isAttacking = false;
 
-			if (gp.checkMapPosition(nextY, nextX) == 1) {
-				positionY -= speed;
-				direction = "up";
-				return;
+			if (!needsToCheckNext) {
+				if (gp.checkMapPosition(nextY, nextX) == 1) {
+					positionY -= speed;
+				}
+			} else {
+				if (gp.checkMapPosition(nextY, nextX) == 1 && gp.checkMapPosition(nextY, nextX + 1) == 1) {
+					positionY -= speed;
+				}
 			}
+			direction = "up";
+			return;
 		}
 		if (kh.downPressed) {
 			int nextY = (int) Math.ceil((positionY + speed) / 16);
 			int nextX = (int) (positionX / 16);
 
+			boolean needsToCheckNext = ((positionX % 16 == 12) || (positionX % 16 == 8));
+
+			System.out.println("PositionX: "+positionX);
+			System.out.println("PositionY: "+positionY);
+
 			isAttacking = false;
 
-			if (gp.checkMapPosition(nextY, nextX) == 1) {
-				positionY += speed;
-				direction = "down";
-				return;
+			if (!needsToCheckNext) {
+				if (gp.checkMapPosition(nextY, nextX) == 1) {
+					positionY += speed;
+				}
+			} else {
+				if (gp.checkMapPosition(nextY, nextX) == 1 && gp.checkMapPosition(nextY, nextX + 1) == 1) {
+					positionY += speed;
+				}
 			}
-
+			direction = "down";
+			return;
 		}
 		if (kh.leftPressed) {
 			int nextY = (int) (positionY / 16);
@@ -74,10 +92,12 @@ public class Player extends Character {
 
 			if (gp.checkMapPosition(nextY, nextX) == 1) {
 				positionX -= speed;
-				direction = "left";
-				return;
 			}
+
+			direction = "left";
+			return;
 		}
+
 		if (kh.rightPressed) {
 			int nextY = (int) Math.floor(positionY / 16);
 			int nextX = (int) Math.ceil((positionX + speed) / 16);
