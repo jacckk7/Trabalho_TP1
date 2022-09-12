@@ -2,6 +2,7 @@ package entities;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.awt.Rectangle;
 import javax.imageio.ImageIO;
 
 import handlers.KeyHandler;
@@ -24,6 +25,7 @@ public class Player extends Character {
 		this.kh = kh;
 		this.direction = "down";
 		this.isAttacking = false;
+		super.life = 12;
 		getPlayerImage();
 	}
 
@@ -47,7 +49,7 @@ public class Player extends Character {
 
 			isAttacking = false;
 
-			if (gp.checkMapPosition(nextY, nextX) == 1) {
+			if (gp.checkMapPosition(nextY, nextX) == 1 && !isColliding(positionX, (int) (positionY - speed))) {
 				positionY -= speed;
 				direction = "up";
 				return;
@@ -59,7 +61,7 @@ public class Player extends Character {
 
 			isAttacking = false;
 
-			if (gp.checkMapPosition(nextY, nextX) == 1) {
+			if (gp.checkMapPosition(nextY, nextX) == 1 && !isColliding(positionX, (int) (positionY + speed))) {
 				positionY += speed;
 				direction = "down";
 				return;
@@ -72,7 +74,7 @@ public class Player extends Character {
 
 			isAttacking = false;
 
-			if (gp.checkMapPosition(nextY, nextX) == 1) {
+			if (gp.checkMapPosition(nextY, nextX) == 1 && !isColliding((int) (positionX - speed), positionY)) {
 				positionX -= speed;
 				direction = "left";
 				return;
@@ -83,7 +85,7 @@ public class Player extends Character {
 			int nextX = (int) Math.ceil((positionX + speed) / 16);
 
 			isAttacking = false;
-			if (gp.checkMapPosition(nextY, nextX) == 1) {
+			if (gp.checkMapPosition(nextY, nextX) == 1 && !isColliding((int) (positionX + speed), positionY)) {
 				positionX += speed;
 				direction = "right";
 				return;
@@ -92,6 +94,7 @@ public class Player extends Character {
 
 		if (kh.kPressed) {
 			isAttacking = true;
+			isHiting();
 		}
 
 	}
@@ -222,6 +225,117 @@ public class Player extends Character {
 
 	}
 
+	public boolean isColliding(int nextX, int nextY) {
+        Rectangle link = new Rectangle(nextX, nextY, 16, 16);
+        if (gp.tm.getCurrentMap().getName().equals("Bottom Right")) {
+            for(int i = 0; i < App.enemiesBottomRight.size(); i++) {
+                EnemyMeele e = App.enemiesBottomRight.get(i);
+                Rectangle targetEnemy = new Rectangle(e.getPositionX() + 2, e.getPositionY() + 2, 12, 12);
+                if(link.intersects(targetEnemy)) {
+                    return true;
+                }
+            }
+        } else if (gp.tm.getCurrentMap().getName().equals("Top left")) {
+            for(int i = 0; i < App.enemiesTopLeft.size(); i++) {
+                EnemyMeele e = App.enemiesTopLeft.get(i);
+                Rectangle targetEnemy = new Rectangle(e.getPositionX() + 2, e.getPositionY() + 2, 12, 12);
+                if(link.intersects(targetEnemy)) {
+                    return true;
+                }
+            }
+        } else if (gp.tm.getCurrentMap().getName().equals("Bottom left")) {
+            for(int i = 0; i < App.enemiesBottomLeft.size(); i++) {
+                EnemyRanged e = App.enemiesBottomLeft.get(i);
+                Rectangle targetEnemy = new Rectangle(e.getPositionX() + 2, e.getPositionY() + 2, 12, 12);
+                if(link.intersects(targetEnemy)) {
+                    return true;
+                }
+            }
+        } else if (gp.tm.getCurrentMap().getName().equals("Top Right")) {
+            for(int i = 0; i < App.enemiesTopRight.size(); i++) {
+                EnemyRanged e = App.enemiesTopRight.get(i);
+                Rectangle targetEnemy = new Rectangle(e.getPositionX() + 2, e.getPositionY() + 2, 12, 12);
+                if(link.intersects(targetEnemy)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+	public void isHiting() {
+		int swordX = 0, swordY = 0, swordW = 0, swordH = 0;
+		if (direction.equals("down")) {
+			swordX = positionX + 4;
+			swordY = positionY + 16;
+			swordW = 8;
+			swordH = 16;
+		} else if (direction.equals("left")) {
+			swordX = positionX - 16;
+			swordY = positionY + 4;
+			swordW = 16;
+			swordH = 8;
+		} else if (direction.equals("up")) {
+			swordX = positionX + 4;
+			swordY = positionY - 16;
+			swordW = 8;
+			swordH = 16;
+		} else if (direction.equals("right")) {
+			swordX = positionX + 16;
+			swordY = positionY + 4;
+			swordW = 16;
+			swordH = 8;
+		}
+        Rectangle linkSword = new Rectangle(swordX, swordY, swordW, swordH);
+        if (gp.tm.getCurrentMap().getName().equals("Bottom Right")) {
+            for(int i = 0; i < App.enemiesBottomRight.size(); i++) {
+                EnemyMeele e = App.enemiesBottomRight.get(i);
+                Rectangle targetEnemy = new Rectangle(e.getPositionX() + 2, e.getPositionY() + 2, 12, 12);
+                if(linkSword.intersects(targetEnemy)) {
+                    e.getHit();
+                }
+            }
+        } else if (gp.tm.getCurrentMap().getName().equals("Top left")) {
+            for(int i = 0; i < App.enemiesTopLeft.size(); i++) {
+                EnemyMeele e = App.enemiesTopLeft.get(i);
+                Rectangle targetEnemy = new Rectangle(e.getPositionX() + 2, e.getPositionY() + 2, 12, 12);
+                if(linkSword.intersects(targetEnemy)) {
+                    e.getHit();
+                }
+            }
+        } else if (gp.tm.getCurrentMap().getName().equals("Bottom left")) {
+            for(int i = 0; i < App.enemiesBottomLeft.size(); i++) {
+                EnemyRanged e = App.enemiesBottomLeft.get(i);
+                Rectangle targetEnemy = new Rectangle(e.getPositionX() + 2, e.getPositionY() + 2, 12, 12);
+                if(linkSword.intersects(targetEnemy)) {
+                    e.getHit();
+                }
+            }
+        } else if (gp.tm.getCurrentMap().getName().equals("Top Right")) {
+            for(int i = 0; i < App.enemiesTopRight.size(); i++) {
+                EnemyRanged e = App.enemiesTopRight.get(i);
+                Rectangle targetEnemy = new Rectangle(e.getPositionX() + 2, e.getPositionY() + 2, 12, 12);
+                if(linkSword.intersects(targetEnemy)) {
+                    e.getHit();
+                }
+            }
+        }
+    }
+
+	public void getHit() {
+		this.life -= 1;
+		if (direction.equals("down")) {
+            positionY -= 4;
+        } else if (direction.equals("left")) {
+            positionX += 4;
+        } else if (direction.equals("up")) {
+            positionY += 4;
+        } else if (direction.equals("right")) {
+            positionX -= 4;
+        }
+	}
+
 	public void getPlayerImage() {
 		try {
 			up1 = ImageIO.read(new FileInputStream("src/assets/link_up1.png"));
@@ -240,7 +354,6 @@ public class Player extends Character {
 			attackLeft2 = ImageIO.read(new FileInputStream("src/assets/link_attack_left2.png"));
 			attackRight1 = ImageIO.read(new FileInputStream("src/assets/link_attack_right1.png"));
 			attackRight2 = ImageIO.read(new FileInputStream("src/assets/link_attack_right2.png"));
-			System.out.println(up1);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
