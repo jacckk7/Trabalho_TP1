@@ -54,32 +54,18 @@ public class Player extends Character {
 
 			isAttacking = false;
 
-<<<<<<< HEAD
-			if (gp.checkMapPosition(nextY, nextX) == 1 && !isColliding(positionX, (int) (positionY - speed))) {
-				positionY -= speed;
-				direction = "up";
-				return;
-=======
 			if (!needsToCheckNext) {
-				if (gp.checkMapPosition(nextY, nextX) == 1) {
+				if (gp.checkMapPosition(nextY, nextX) == 1  && !isColliding(positionX, (int) (positionY - speed))) {
 					positionY -= speed;
 				}
 			} else {
-				if (gp.checkMapPosition(nextY, nextX + 1) == 1) {
+				if (gp.checkMapPosition(nextY, nextX + 1) == 1  && !isColliding(positionX, (int) (positionY - speed))) {
 					positionY -= speed;
 				}
->>>>>>> main
-if (!needsToCheckNext) {
-	if (gp.checkMapPosition(nextY, nextX) == 1  && !isColliding(positionX, (int) (positionY - speed))) {
-		positionY -= speed;
-	}
-} else {
-	if (gp.checkMapPosition(nextY, nextX + 1) == 1  && !isColliding(positionX, (int) (positionY - speed))) {
-		positionY -= speed;
-	}
-}
-direction = "up";
-return;
+			}
+			direction = "up";
+			return;
+		}
 		if (kh.downPressed) {
 			nextY = (int) Math.ceil((positionY + speed) / 16);
 			nextX = (int) (positionX / 16);
@@ -88,110 +74,65 @@ return;
 
 			isAttacking = false;
 
-<<<<<<< HEAD
-			if (gp.checkMapPosition(nextY, nextX) == 1 && !isColliding(positionX, (int) (positionY + speed))) {
-				positionY += speed;
-				direction = "down";
-				return;
-=======
 			if (!needsToCheckNext) {
-				if (gp.checkMapPosition(nextY, nextX) == 1) {
+				if (gp.checkMapPosition(nextY, nextX) == 1  && !isColliding(positionX, (int) (positionY + speed))) {
 					positionY += speed;
 				}
 			} else {
-				if (gp.checkMapPosition(nextY, nextX+1) == 1) {
+				if (gp.checkMapPosition(nextY, nextX+1) == 1  && !isColliding(positionX, (int) (positionY + speed))) {
 					positionY += speed;
 				}
->>>>>>> main
-if (!needsToCheckNext) {
-	if (gp.checkMapPosition(nextY, nextX) == 1  && !isColliding(positionX, (int) (positionY + speed))) {
-		positionY += speed;
-	}
-} else {
-	if (gp.checkMapPosition(nextY, nextX+1) == 1  && !isColliding(positionX, (int) (positionY + speed))) {
-		positionY += speed;
-	}
-}
-direction = "down";
-return;
+			}
+			direction = "down";
+			return;
+		}
 		if (kh.leftPressed) {
 			nextY = (int) (positionY / 16);
 			nextX = (int) Math.floor((positionX - speed) / 16);
 
-			boolean needsToCheckNext = (positionY% 16 >= 10);
+			needsToCheckNext = (positionY% 16 >= 10);
 
 			isAttacking = false;
 
-<<<<<<< HEAD
-			if (gp.checkMapPosition(nextY, nextX) == 1 && !isColliding((int) (positionX - speed), positionY)) {
-				positionX -= speed;
-				direction = "left";
-				return;
-=======
 			if (!needsToCheckNext) {
-				if (gp.checkMapPosition(nextY, nextX) == 1) {
+				if (gp.checkMapPosition(nextY, nextX) == 1  && !isColliding((int) (positionX - speed), positionY)) {
 					positionX -= speed;
 				}
 			} else {
-				if (gp.checkMapPosition(nextY+1, nextX) == 1) {
+				if (gp.checkMapPosition(nextY+1, nextX) == 1  && !isColliding((int) (positionX - speed), positionY)) {
 					positionX -= speed;
 				}
->>>>>>> main
-if (!needsToCheckNext) {
-	if (gp.checkMapPosition(nextY, nextX) == 1  && !isColliding((int) (positionX - speed), positionY)) {
-		positionX -= speed;
-	}
-} else {
-	if (gp.checkMapPosition(nextY+1, nextX) == 1  && !isColliding((int) (positionX - speed), positionY)) {
-		positionX -= speed;
-	}
-}
-direction = "left";
-return;
-}
+			}
+			direction = "left";
+			return;
+		}
 
 		if (kh.rightPressed) {
 			nextY = (int) (positionY / 16);
 			nextX = (int) Math.ceil((positionX + speed) / 16);
 			isAttacking = false;
-<<<<<<< HEAD
-			if (gp.checkMapPosition(nextY, nextX) == 1 && !isColliding((int) (positionX + speed), positionY)) {
-				positionX += speed;
-				direction = "right";
-				return;
-=======
 
-			boolean needsToCheckNext = (positionY% 16 >= 10);
+			needsToCheckNext = (positionY% 16 >= 10);
 	
 			isAttacking = false;
 
 			if (!needsToCheckNext) {
-				if (gp.checkMapPosition(nextY, nextX) == 1) {
+				if (gp.checkMapPosition(nextY, nextX) == 1  && !isColliding((int) (positionX + speed), positionY)) {
 					positionX += speed;
 				}
 			} else {
-				if (gp.checkMapPosition(nextY+1, nextX) == 1) {
+				if (gp.checkMapPosition(nextY+1, nextX) == 1  && !isColliding((int) (positionX + speed), positionY)) {
 					positionX += speed;
 				}
->>>>>>> main
-if (!needsToCheckNext) {
-	if (gp.checkMapPosition(nextY, nextX) == 1  && !isColliding((int) (positionX + speed), positionY)) {
-		positionX += speed;
-	}
-} else {
-	if (gp.checkMapPosition(nextY+1, nextX) == 1  && !isColliding((int) (positionX + speed), positionY)) {
-		positionX += speed;
-	}
-}
-direction = "right";
-return;
+			}
+			direction = "right";
+			return;
 		}
 
 		if (kh.kPressed) {
 			isAttacking = true;
 			isHiting();
 		}
-
 	}
 
 	public void draw(Graphics g) {
