@@ -7,7 +7,6 @@ import java.awt.image.BufferStrategy;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
-
 import entities.EnemyMeele;
 import entities.EnemyRanged;
 import entities.Player;
@@ -95,8 +94,13 @@ public class App extends Canvas implements Runnable {
 	}
 
 	public static void main(String[] args) {
-		App game = new App();
-		game.start();
+		MainMenu menu = new MainMenu();
+		menu.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		menu.setSize(256, 260);
+		menu.setResizable(false);
+		menu.pack();
+		menu.setLocationRelativeTo(null);
+		menu.setVisible(true);
 	}
 
 	public void update() {
@@ -219,6 +223,8 @@ public class App extends Canvas implements Runnable {
 	}
 
 	public int checkMapPosition(int line, int column) {
+		System.out.println("line: "+line );
+		System.out.println("column: "+column );
 		if (line < 0) {
 			tm.changeMap("above");
 			System.out.println("Map changed:");
