@@ -7,7 +7,6 @@ import java.awt.image.BufferStrategy;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
-
 import entities.EnemyMeele;
 import entities.Player;
 import handlers.KeyHandler;
@@ -71,8 +70,13 @@ public class App extends Canvas implements Runnable {
 	}
 
 	public static void main(String[] args) {
-		App game = new App();
-		game.start();
+		MainMenu menu = new MainMenu();
+		menu.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		menu.setSize(256, 260);
+		menu.setResizable(false);
+		menu.pack();
+		menu.setLocationRelativeTo(null);
+		menu.setVisible(true);
 	}
 
 	public void update() {
