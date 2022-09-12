@@ -19,7 +19,7 @@ public class Player extends Character {
 	public int attackSpriteCounter;
 
 	public Player(App gp, KeyHandler kh) {
-		super(0, 130, 4.0, "down");
+		super(16, 130, 4.0, "down");
 		this.gp = gp;
 		this.kh = kh;
 		this.direction = "down";
@@ -45,49 +45,83 @@ public class Player extends Character {
 			int nextY = (int) Math.floor((positionY - speed) / 16);
 			int nextX = (int) (positionX / 16);
 
+			boolean needsToCheckNext = (positionX % 16 >= 8);
+
 			isAttacking = false;
 
-			if (gp.checkMapPosition(nextY, nextX) == 1) {
-				positionY -= speed;
-				direction = "up";
-				return;
+			if (!needsToCheckNext) {
+				if (gp.checkMapPosition(nextY, nextX) == 1) {
+					positionY -= speed;
+				}
+			} else {
+				if (gp.checkMapPosition(nextY, nextX + 1) == 1) {
+					positionY -= speed;
+				}
 			}
+			direction = "up";
+			return;
 		}
 		if (kh.downPressed) {
 			int nextY = (int) Math.ceil((positionY + speed) / 16);
 			int nextX = (int) (positionX / 16);
 
+			boolean needsToCheckNext = (positionX% 16 >= 8);
+
 			isAttacking = false;
 
-			if (gp.checkMapPosition(nextY, nextX) == 1) {
-				positionY += speed;
-				direction = "down";
-				return;
+			if (!needsToCheckNext) {
+				if (gp.checkMapPosition(nextY, nextX) == 1) {
+					positionY += speed;
+				}
+			} else {
+				if (gp.checkMapPosition(nextY, nextX+1) == 1) {
+					positionY += speed;
+				}
 			}
-
+			direction = "down";
+			return;
 		}
 		if (kh.leftPressed) {
 			int nextY = (int) (positionY / 16);
 			int nextX = (int) Math.floor((positionX - speed) / 16);
 
+			boolean needsToCheckNext = (positionY% 16 >= 10);
+
 			isAttacking = false;
 
-			if (gp.checkMapPosition(nextY, nextX) == 1) {
-				positionX -= speed;
-				direction = "left";
-				return;
+			if (!needsToCheckNext) {
+				if (gp.checkMapPosition(nextY, nextX) == 1) {
+					positionX -= speed;
+				}
+			} else {
+				if (gp.checkMapPosition(nextY+1, nextX) == 1) {
+					positionX -= speed;
+				}
 			}
+			direction = "left";
+			return;
 		}
-		if (kh.rightPressed) {
-			int nextY = (int) Math.floor(positionY / 16);
-			int nextX = (int) Math.ceil((positionX + speed) / 16);
 
+		if (kh.rightPressed) {
+			int nextY = (int) (positionY / 16);
+			int nextX = (int) Math.ceil((positionX + speed) / 16);
 			isAttacking = false;
-			if (gp.checkMapPosition(nextY, nextX) == 1) {
-				positionX += speed;
-				direction = "right";
-				return;
+
+			boolean needsToCheckNext = (positionY% 16 >= 10);
+	
+			isAttacking = false;
+
+			if (!needsToCheckNext) {
+				if (gp.checkMapPosition(nextY, nextX) == 1) {
+					positionX += speed;
+				}
+			} else {
+				if (gp.checkMapPosition(nextY+1, nextX) == 1) {
+					positionX += speed;
+				}
 			}
+			direction = "right";
+			return;
 		}
 
 		if (kh.kPressed) {
@@ -192,13 +226,13 @@ public class Player extends Character {
 				if (isAttacking) {
 					if (attackSpriteCounter == 0) {
 						image = attackLeft1;
-						g.drawImage(image, positionX-11, positionY, null);
+						g.drawImage(image, positionX - 11, positionY, null);
 						attackSpriteCounter++;
 						return;
 					}
 					if (attackSpriteCounter == 1) {
 						image = attackLeft2;
-						g.drawImage(image, positionX-3, positionY, null);
+						g.drawImage(image, positionX - 3, positionY, null);
 						attackSpriteCounter++;
 						return;
 					}
