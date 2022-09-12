@@ -8,7 +8,9 @@ import java.util.ArrayList;
 
 import javax.swing.JFrame;
 import entities.EnemyMeele;
+import entities.EnemyRanged;
 import entities.Player;
+import entities.Hearts;
 import handlers.KeyHandler;
 import maps.TileManager;
 
@@ -24,9 +26,13 @@ public class App extends Canvas implements Runnable {
 	public final short tileSize = originalTileSize * SCALE;
 	private KeyHandler keyHandler;
 	Player player;
-	TileManager tm;
+	Hearts hearts;
+	public TileManager tm;
 
+	public static ArrayList<EnemyRanged> enemiesBottomLeft;
 	public static ArrayList<EnemyMeele> enemiesBottomRight;
+	public static ArrayList<EnemyRanged> enemiesTopRight;
+	public static ArrayList<EnemyMeele> enemiesTopLeft;
 
 	public App() {
 		setPreferredSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));
@@ -34,14 +40,32 @@ public class App extends Canvas implements Runnable {
 		keyHandler = new KeyHandler();
 		this.addKeyListener(keyHandler);
 		player = new Player(this, keyHandler);
+		hearts = new Hearts(player);
+
 		tm = new TileManager(this);
 		System.out.println(tm.getCurrentMap());
+
+		enemiesBottomLeft = new ArrayList<EnemyRanged>();
+		enemiesBottomLeft.add(new EnemyRanged(192, 176, "vertical", player, this));
+		enemiesBottomLeft.add(new EnemyRanged(32, 32, "horizontal", player, this));
+		enemiesBottomLeft.add(new EnemyRanged(32, 192, "horizontal", player, this));
 
 		enemiesBottomRight = new ArrayList<EnemyMeele>();
 		enemiesBottomRight.add(new EnemyMeele(192, 160, "vertical", player, this));
 		enemiesBottomRight.add(new EnemyMeele(48, 160, "vertical", player, this));
 		enemiesBottomRight.add(new EnemyMeele(80, 80, "horizontal", player, this));
 		enemiesBottomRight.add(new EnemyMeele(80, 176, "horizontal", player, this));
+
+		enemiesTopRight = new ArrayList<EnemyRanged>();
+		enemiesTopRight.add(new EnemyRanged(208, 160, "vertical", player, this));
+		enemiesTopRight.add(new EnemyRanged(32, 176, "vertical", player, this));
+		enemiesTopRight.add(new EnemyRanged(32, 48, "horizontal", player, this));
+
+		enemiesTopLeft = new ArrayList<EnemyMeele>();
+		enemiesTopLeft.add(new EnemyMeele(16, 144, "vertical", player, this));
+		enemiesTopLeft.add(new EnemyMeele(208, 144, "vertical", player, this));
+		enemiesTopLeft.add(new EnemyMeele(32, 192, "horizontal", player, this));
+		enemiesTopLeft.add(new EnemyMeele(128, 32, "horizontal", player, this));
 	}
 
 	public void initFrame() {
@@ -81,12 +105,53 @@ public class App extends Canvas implements Runnable {
 
 	public void update() {
 		player.update();
-
-		if (tm.getCurrentMap().getName().equals("Bottom Right")) {
-			for(EnemyMeele enemies : enemiesBottomRight) {
-				enemies.update();
+		int getIndex = -1;
+		if (tm.getCurrentMap().getName().equals("Bottom left")) {
+			for(int i = 0; i < enemiesBottomLeft.size(); i++) {
+				if (enemiesBottomLeft.get(i).getLife() < 0) {
+					getIndex = i;
+				}
+				enemiesBottomLeft.get(i).update();
+			}
+			if (getIndex != -1) {
+				enemiesBottomLeft.remove(getIndex);
+				getIndex = -1;
+			}
+		}else if (tm.getCurrentMap().getName().equals("Bottom Right")) {
+			for(int i = 0; i < enemiesBottomRight.size(); i++) {
+				if (enemiesBottomRight.get(i).getLife() < 0) {
+					getIndex = i;
+				}
+				enemiesBottomRight.get(i).update();
+			}
+			if (getIndex != -1) {
+				enemiesBottomRight.remove(getIndex);
+				getIndex = -1;
+			}
+		} else if (tm.getCurrentMap().getName().equals("Top Right")) {
+			for(int i = 0; i < enemiesTopRight.size(); i++) {
+				if (enemiesTopRight.get(i).getLife() < 0) {
+					getIndex = i;
+				}
+				enemiesTopRight.get(i).update();
+			}
+			if (getIndex != -1) {
+				enemiesTopRight.remove(getIndex);
+				getIndex = -1;
+			}
+		} else if (tm.getCurrentMap().getName().equals("Top left")) {
+			for(int i = 0; i < enemiesTopLeft.size(); i++) {
+				if (enemiesTopLeft.get(i).getLife() < 0) {
+					getIndex = i;
+				}
+				enemiesTopLeft.get(i).update();
+			}
+			if (getIndex != -1) {
+				enemiesTopLeft.remove(getIndex);
+				getIndex = -1;
 			}
 		}
+		hearts.update();
 	}
 
 	public void render() {
@@ -99,11 +164,25 @@ public class App extends Canvas implements Runnable {
 		tm.drawMap(g);
 		player.draw(g);
 
-		if (tm.getCurrentMap().getName().equals("Bottom Right")) {
+		if (tm.getCurrentMap().getName().equals("Bottom left")) {
+			for(EnemyRanged enemies : enemiesBottomLeft) {
+				enemies.draw(g);
+			}
+		}else if (tm.getCurrentMap().getName().equals("Bottom Right")) {
 			for(EnemyMeele enemies : enemiesBottomRight) {
 				enemies.draw(g);
 			}
+		} else if (tm.getCurrentMap().getName().equals("Top Right")) {
+			for(EnemyRanged enemies : enemiesTopRight) {
+				enemies.draw(g);
+			}
+		} else if (tm.getCurrentMap().getName().equals("Top left")) {
+			for(EnemyMeele enemies : enemiesTopLeft) {
+				enemies.draw(g);
+			}
 		}
+
+		hearts.draw(g);
 
 		bs.show();
 		g.dispose();
