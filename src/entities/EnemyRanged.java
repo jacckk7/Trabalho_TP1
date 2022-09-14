@@ -177,7 +177,7 @@ public class EnemyRanged extends Character {
     
             if (isBullet) {
                 if (bulletDirection.equals("down")) {
-                    bulletY += 2;
+                    bulletY += 4;
                     if (bulletY > 256) {
                         isBullet = false;
                     } else if (hitLink()) {
@@ -185,7 +185,7 @@ public class EnemyRanged extends Character {
                         isBullet = false;
                     }
                 } else if (bulletDirection.equals("left")) {
-                    bulletX -= 2;
+                    bulletX -= 4;
                     if (bulletX < 0) {
                         isBullet = false;
                     } else if (hitLink()) {
@@ -193,7 +193,7 @@ public class EnemyRanged extends Character {
                         isBullet = false;
                     }
                 } else if (bulletDirection.equals("up")) {
-                    bulletY -= 2;
+                    bulletY -= 4;
                     if (bulletY < 0) {
                         isBullet = false;
                     } else if (hitLink()) {
@@ -201,7 +201,7 @@ public class EnemyRanged extends Character {
                         isBullet = false;
                     }
                 }  else if (bulletDirection.equals("right")) {
-                    bulletX += 2;
+                    bulletX += 4;
                     if (bulletX > 240) {
                         isBullet = false;
                     } else if (hitLink()) {
@@ -220,7 +220,7 @@ public class EnemyRanged extends Character {
             bulletX = positionX;
             bulletY = positionY;
 
-            shootCount = 120;
+            shootCount = 60;
         }
     }
 
@@ -241,15 +241,15 @@ public class EnemyRanged extends Character {
 
     public void getHit() {
         this.life -= 1;
-        if (direction.equals("down")) {
-            positionY -= 4;
-        } else if (direction.equals("left")) {
-            positionX += 4;
-        } else if (direction.equals("up")) {
-            positionY += 4;
-        } else if (direction.equals("right")) {
-            positionX -= 4;
-        }
+        // if (direction.equals("down")) {
+        //     positionY -= 4;
+        // } else if (direction.equals("left")) {
+        //     positionX += 4;
+        // } else if (direction.equals("up")) {
+        //     positionY += 4;
+        // } else if (direction.equals("right")) {
+        //     positionX -= 4;
+        // }
     }
 
     public void getRangedEnemyImage() {

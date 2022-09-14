@@ -12,7 +12,6 @@ import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.border.LineBorder;
 import javax.swing.JButton;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;

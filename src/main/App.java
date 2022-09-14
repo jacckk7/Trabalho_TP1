@@ -4,8 +4,12 @@ import java.awt.Canvas;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
+import java.awt.image.BufferedImage;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import entities.EnemyMeele;
 import entities.EnemyRanged;
@@ -25,9 +29,10 @@ public class App extends Canvas implements Runnable {
 	public final short originalTileSize = 16;
 	public final short tileSize = originalTileSize * SCALE;
 	private KeyHandler keyHandler;
+	private BufferedImage gameOver;
+	public TileManager tm;
 	Player player;
 	Hearts hearts;
-	public TileManager tm;
 
 	public static ArrayList<EnemyRanged> enemiesBottomLeft;
 	public static ArrayList<EnemyMeele> enemiesBottomRight;
@@ -66,6 +71,12 @@ public class App extends Canvas implements Runnable {
 		enemiesTopLeft.add(new EnemyMeele(208, 144, "vertical", player, this));
 		enemiesTopLeft.add(new EnemyMeele(32, 192, "horizontal", player, this));
 		enemiesTopLeft.add(new EnemyMeele(128, 32, "horizontal", player, this));
+
+		try {
+			gameOver = ImageIO.read(new FileInputStream("src/assets/game_over.png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void initFrame() {
@@ -104,54 +115,62 @@ public class App extends Canvas implements Runnable {
 	}
 
 	public void update() {
-		player.update();
-		int getIndex = -1;
-		if (tm.getCurrentMap().getName().equals("Bottom left")) {
-			for(int i = 0; i < enemiesBottomLeft.size(); i++) {
-				if (enemiesBottomLeft.get(i).getLife() < 0) {
-					getIndex = i;
+		if (player.getLife() > 0) {
+			player.update();
+			int getIndex = -1;
+			if (tm.getCurrentMap().getName().equals("Bottom left")) {
+				for(int i = 0; i < enemiesBottomLeft.size(); i++) {
+					if (enemiesBottomLeft.get(i).getLife() < 0) {
+						getIndex = i;
+					}
+					enemiesBottomLeft.get(i).update();
 				}
-				enemiesBottomLeft.get(i).update();
-			}
-			if (getIndex != -1) {
-				enemiesBottomLeft.remove(getIndex);
-				getIndex = -1;
-			}
-		}else if (tm.getCurrentMap().getName().equals("Bottom Right")) {
-			for(int i = 0; i < enemiesBottomRight.size(); i++) {
-				if (enemiesBottomRight.get(i).getLife() < 0) {
-					getIndex = i;
+				if (getIndex != -1) {
+					enemiesBottomLeft.remove(getIndex);
+					getIndex = -1;
 				}
-				enemiesBottomRight.get(i).update();
-			}
-			if (getIndex != -1) {
-				enemiesBottomRight.remove(getIndex);
-				getIndex = -1;
-			}
-		} else if (tm.getCurrentMap().getName().equals("Top Right")) {
-			for(int i = 0; i < enemiesTopRight.size(); i++) {
-				if (enemiesTopRight.get(i).getLife() < 0) {
-					getIndex = i;
+			}else if (tm.getCurrentMap().getName().equals("Bottom Right")) {
+				for(int i = 0; i < enemiesBottomRight.size(); i++) {
+					if (enemiesBottomRight.get(i).getLife() < 0) {
+						getIndex = i;
+					}
+					enemiesBottomRight.get(i).update();
 				}
-				enemiesTopRight.get(i).update();
-			}
-			if (getIndex != -1) {
-				enemiesTopRight.remove(getIndex);
-				getIndex = -1;
-			}
-		} else if (tm.getCurrentMap().getName().equals("Top left")) {
-			for(int i = 0; i < enemiesTopLeft.size(); i++) {
-				if (enemiesTopLeft.get(i).getLife() < 0) {
-					getIndex = i;
+				if (getIndex != -1) {
+					enemiesBottomRight.remove(getIndex);
+					getIndex = -1;
 				}
-				enemiesTopLeft.get(i).update();
+			} else if (tm.getCurrentMap().getName().equals("Top Right")) {
+				for(int i = 0; i < enemiesTopRight.size(); i++) {
+					if (enemiesTopRight.get(i).getLife() < 0) {
+						getIndex = i;
+					}
+					enemiesTopRight.get(i).update();
+				}
+				if (getIndex != -1) {
+					enemiesTopRight.remove(getIndex);
+					getIndex = -1;
+				}
+			} else if (tm.getCurrentMap().getName().equals("Top left")) {
+				for(int i = 0; i < enemiesTopLeft.size(); i++) {
+					if (enemiesTopLeft.get(i).getLife() < 0) {
+						getIndex = i;
+					}
+					enemiesTopLeft.get(i).update();
+				}
+				if (getIndex != -1) {
+					enemiesTopLeft.remove(getIndex);
+					getIndex = -1;
+				}
 			}
-			if (getIndex != -1) {
-				enemiesTopLeft.remove(getIndex);
-				getIndex = -1;
+			hearts.update();
+		} else {
+			if (keyHandler.anyPressed) {
+				// MainMenu menu = new MainMenu();
+				main(null);
+            	frame.dispose();
 			}
 		}
-		hearts.update();
 	}
 
 	public void render() {
@@ -161,28 +180,32 @@ public class App extends Canvas implements Runnable {
 			return;
 		}
 		Graphics g = bs.getDrawGraphics();
-		tm.drawMap(g);
-		player.draw(g);
+		if (player.getLife() > 0) {
+			tm.drawMap(g);
+			player.draw(g);
 
-		if (tm.getCurrentMap().getName().equals("Bottom left")) {
-			for(EnemyRanged enemies : enemiesBottomLeft) {
-				enemies.draw(g);
+			if (tm.getCurrentMap().getName().equals("Bottom left")) {
+				for(EnemyRanged enemies : enemiesBottomLeft) {
+					enemies.draw(g);
+				}
+			}else if (tm.getCurrentMap().getName().equals("Bottom Right")) {
+				for(EnemyMeele enemies : enemiesBottomRight) {
+					enemies.draw(g);
+				}
+			} else if (tm.getCurrentMap().getName().equals("Top Right")) {
+				for(EnemyRanged enemies : enemiesTopRight) {
+					enemies.draw(g);
+				}
+			} else if (tm.getCurrentMap().getName().equals("Top left")) {
+				for(EnemyMeele enemies : enemiesTopLeft) {
+					enemies.draw(g);
+				}
 			}
-		}else if (tm.getCurrentMap().getName().equals("Bottom Right")) {
-			for(EnemyMeele enemies : enemiesBottomRight) {
-				enemies.draw(g);
-			}
-		} else if (tm.getCurrentMap().getName().equals("Top Right")) {
-			for(EnemyRanged enemies : enemiesTopRight) {
-				enemies.draw(g);
-			}
-		} else if (tm.getCurrentMap().getName().equals("Top left")) {
-			for(EnemyMeele enemies : enemiesTopLeft) {
-				enemies.draw(g);
-			}
+
+			hearts.draw(g);
+		} else {
+			g.drawImage(gameOver, 0, 0, null);
 		}
-
-		hearts.draw(g);
 
 		bs.show();
 		g.dispose();
@@ -192,7 +215,7 @@ public class App extends Canvas implements Runnable {
 	@Override
 	public void run() {
 		long lastTime = System.nanoTime();
-		double amountOfTicks = 60.0;
+		double amountOfTicks = 30.0;
 		double ns = 1000000000 / amountOfTicks;
 		double delta = 0;
 		int frames = 0;
