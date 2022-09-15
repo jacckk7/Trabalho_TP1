@@ -231,13 +231,7 @@ public class App extends Canvas implements Runnable {
 			hearts.draw(g);
 		} else {
 			g.drawImage(gameOver, 0, 0, null);
-<<<<<<< HEAD
 			if (keyHandler.getAnyPressed()) {
-=======
-			if (keyHandler.anyPressed) {
-				Ranking r = new Ranking("src/ranking.txt");
-				r.add(player.name, player.score);
->>>>>>> 91ca47fe78f8014c05cd0c641e4a20391949f6b9
 				main(null);
 				stop();
 				frame.dispose();
