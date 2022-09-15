@@ -24,8 +24,8 @@ public class App extends Canvas implements Runnable {
 	private Thread thread; 
 	private boolean isRunning;
 	private final short SCALE = 1;
-	private final short WIDTH = 1000;
-	private final short HEIGHT = 1000;
+	private final short WIDTH = 256;
+	private final short HEIGHT = 240;
 	public final short originalTileSize = 16;
 	public final short tileSize = originalTileSize * SCALE;
 	private KeyHandler keyHandler;
