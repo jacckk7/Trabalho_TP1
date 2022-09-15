@@ -13,9 +13,11 @@ public class TileManager {
 	Map currentMap;
 	App gp;
 	ArrayList<BufferedImage> images;
-	String lastMapName;
+	private String lastMapName;
 
 	public TileManager(App App) {
+		lastMapName = "";
+
 		try {
 			images = new ArrayList<BufferedImage>();
 			images.add(ImageIO.read(new FileInputStream("src/assets/bush.png")));
@@ -96,5 +98,13 @@ public class TileManager {
 
 	public void attLastMap(){
 		lastMapName = currentMap.getName();
+	}
+
+	public String getLastMapName() {
+		return this.lastMapName;
+	}
+
+	public void setLastMapName(String e) {
+		this.lastMapName = e;
 	}
 }
