@@ -21,7 +21,7 @@ import maps.TileManager;
 public class App extends Canvas implements Runnable {
 
 	public static JFrame frame;
-	private Thread thread; 
+	private Thread thread;
 	private boolean isRunning;
 	private final short SCALE = 1;
 	private final short WIDTH = 256;
@@ -115,63 +115,57 @@ public class App extends Canvas implements Runnable {
 	}
 
 	public void update() {
-		if (player.getLife() > 0) {
-			player.update();
-			int getIndex = -1;
-			if (tm.getCurrentMap().getName().equals("Bottom left")) {
-				for(int i = 0; i < enemiesBottomLeft.size(); i++) {
-					if (enemiesBottomLeft.get(i).getLife() < 0) {
-						getIndex = i;
-					}
-					enemiesBottomLeft.get(i).update();
+		player.update();
+		int getIndex = -1;
+		if (tm.getCurrentMap().getName().equals("Bottom left")) {
+			for (int i = 0; i < enemiesBottomLeft.size(); i++) {
+				if (enemiesBottomLeft.get(i).getLife() < 0) {
+					getIndex = i;
 				}
-				if (getIndex != -1) {
-					enemiesBottomLeft.remove(getIndex);
-					getIndex = -1;
-				}
-			}else if (tm.getCurrentMap().getName().equals("Bottom Right")) {
-				for(int i = 0; i < enemiesBottomRight.size(); i++) {
-					if (enemiesBottomRight.get(i).getLife() < 0) {
-						getIndex = i;
-					}
-					enemiesBottomRight.get(i).update();
-				}
-				if (getIndex != -1) {
-					enemiesBottomRight.remove(getIndex);
-					getIndex = -1;
-				}
-			} else if (tm.getCurrentMap().getName().equals("Top Right")) {
-				for(int i = 0; i < enemiesTopRight.size(); i++) {
-					if (enemiesTopRight.get(i).getLife() < 0) {
-						getIndex = i;
-					}
-					enemiesTopRight.get(i).update();
-				}
-				if (getIndex != -1) {
-					enemiesTopRight.remove(getIndex);
-					getIndex = -1;
-				}
-			} else if (tm.getCurrentMap().getName().equals("Top left")) {
-				for(int i = 0; i < enemiesTopLeft.size(); i++) {
-					if (enemiesTopLeft.get(i).getLife() < 0) {
-						getIndex = i;
-					}
-					enemiesTopLeft.get(i).update();
-				}
-				if (getIndex != -1) {
-					enemiesTopLeft.remove(getIndex);
-					getIndex = -1;
-				}
+				enemiesBottomLeft.get(i).update();
 			}
-			hearts.update();
-		} else {
-			if (keyHandler.anyPressed) {
-				// MainMenu menu = new MainMenu();
-				main(null);
-            	frame.dispose();
+			if (getIndex != -1) {
+				enemiesBottomLeft.remove(getIndex);
+				getIndex = -1;
+			}
+		} else if (tm.getCurrentMap().getName().equals("Bottom Right")) {
+			for (int i = 0; i < enemiesBottomRight.size(); i++) {
+				if (enemiesBottomRight.get(i).getLife() < 0) {
+					getIndex = i;
+				}
+				enemiesBottomRight.get(i).update();
+			}
+			if (getIndex != -1) {
+				enemiesBottomRight.remove(getIndex);
+				getIndex = -1;
+			}
+		} else if (tm.getCurrentMap().getName().equals("Top Right")) {
+			for (int i = 0; i < enemiesTopRight.size(); i++) {
+				if (enemiesTopRight.get(i).getLife() < 0) {
+					getIndex = i;
+				}
+				enemiesTopRight.get(i).update();
+			}
+			if (getIndex != -1) {
+				enemiesTopRight.remove(getIndex);
+				getIndex = -1;
+			}
+		} else if (tm.getCurrentMap().getName().equals("Top left")) {
+			for (int i = 0; i < enemiesTopLeft.size(); i++) {
+				if (enemiesTopLeft.get(i).getLife() < 0) {
+					getIndex = i;
+				}
+				enemiesTopLeft.get(i).update();
+			}
+			if (getIndex != -1) {
+				enemiesTopLeft.remove(getIndex);
+				getIndex = -1;
 			}
 		}
+		hearts.update();
 	}
+
+	
 
 	public void render() {
 		BufferStrategy bs = this.getBufferStrategy();
@@ -185,19 +179,19 @@ public class App extends Canvas implements Runnable {
 			player.draw(g);
 
 			if (tm.getCurrentMap().getName().equals("Bottom left")) {
-				for(EnemyRanged enemies : enemiesBottomLeft) {
+				for (EnemyRanged enemies : enemiesBottomLeft) {
 					enemies.draw(g);
 				}
-			}else if (tm.getCurrentMap().getName().equals("Bottom Right")) {
-				for(EnemyMeele enemies : enemiesBottomRight) {
+			} else if (tm.getCurrentMap().getName().equals("Bottom Right")) {
+				for (EnemyMeele enemies : enemiesBottomRight) {
 					enemies.draw(g);
 				}
 			} else if (tm.getCurrentMap().getName().equals("Top Right")) {
-				for(EnemyRanged enemies : enemiesTopRight) {
+				for (EnemyRanged enemies : enemiesTopRight) {
 					enemies.draw(g);
 				}
 			} else if (tm.getCurrentMap().getName().equals("Top left")) {
-				for(EnemyMeele enemies : enemiesTopLeft) {
+				for (EnemyMeele enemies : enemiesTopLeft) {
 					enemies.draw(g);
 				}
 			}
@@ -205,6 +199,11 @@ public class App extends Canvas implements Runnable {
 			hearts.draw(g);
 		} else {
 			g.drawImage(gameOver, 0, 0, null);
+			if (keyHandler.anyPressed) {
+				main(null);
+				stop();
+				frame.dispose();
+			}
 		}
 
 		bs.show();
@@ -246,10 +245,8 @@ public class App extends Canvas implements Runnable {
 	}
 
 	public int checkMapPosition(int line, int column) {
-		System.out.println("line: "+line );
-		System.out.println("column: "+column );
 		if (line < 0) {
-			tm.attLastMap();();
+			tm.attLastMap();
 			tm.changeMap("above");
 			System.out.println("Map changed:");
 			System.out.println(tm.getCurrentMap());

@@ -16,7 +16,8 @@ public class KeyHandler implements KeyListener {
 
 	public void keyPressed(KeyEvent event) {
 		int keyCode = event.getKeyCode();
-
+		anyPressed = true;
+		
 		switch (keyCode) {
 			case KeyEvent.VK_W:
 				upPressed = true;
@@ -33,15 +34,13 @@ public class KeyHandler implements KeyListener {
 			case KeyEvent.VK_K:
 				kPressed = true;
 				break;
-			default:
-				anyPressed = true;
-				break;	
 		}
 
 	}
 
 	public void keyReleased(KeyEvent event) {
 		int keyCode = event.getKeyCode();
+		anyPressed = false;
 
 		switch (keyCode) {
 			case KeyEvent.VK_W:
@@ -58,9 +57,6 @@ public class KeyHandler implements KeyListener {
 				break;
 			case KeyEvent.VK_K:
 				kPressed = false;
-				break;
-			default:
-				anyPressed = false;
 				break;
 		}
 	}

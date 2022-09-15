@@ -23,7 +23,7 @@ public class MainMenu extends JFrame {
     private JButton rankingButton;
 
     public MainMenu() {
-        super("Testing Buttons");
+        super("Zelda");
         setLayout(new BorderLayout());
         Color backgroundColor = new Color(254, 207, 177);
         Color detailColor = new Color(86, 39, 9);
