@@ -364,6 +364,7 @@ public class Player extends Character {
 
 	public void getHit() {
 		this.life -= 1;
+		this.score -= 3;
 		if (direction.equals("down")) {
             positionY -= 4;
         } else if (direction.equals("left")) {

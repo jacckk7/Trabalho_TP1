@@ -2,6 +2,7 @@ package main;
 
 import java.awt.Canvas;
 import java.awt.Dimension;
+import java.awt.Graphics2D;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
@@ -24,11 +25,10 @@ public class App extends Canvas implements Runnable {
 	public static JFrame frame;
 	private Thread thread; 
 	private boolean isRunning;
-	private final short SCALE = 1;
-	private final short WIDTH = 256;
-	private final short HEIGHT = 240;
+	private final short WIDTH = 750;
+	private final short HEIGHT = 720;
 	public final short originalTileSize = 16;
-	public final short tileSize = originalTileSize * SCALE;
+	public final short tileSize = originalTileSize;
 	private KeyHandler keyHandler;
 	private BufferedImage gameOver;
 	public TileManager tm;
@@ -41,7 +41,7 @@ public class App extends Canvas implements Runnable {
 	public static ArrayList<EnemyMeele> enemiesTopLeft;
 
 	public App(String name) {
-		setPreferredSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));
+		setPreferredSize(new Dimension(WIDTH, HEIGHT));
 		initFrame();
 		keyHandler = new KeyHandler();
 		this.addKeyListener(keyHandler);
@@ -205,6 +205,7 @@ public class App extends Canvas implements Runnable {
 			return;
 		}
 		Graphics g = bs.getDrawGraphics();
+		((Graphics2D) g).scale(3.0, 3.0);
 		if (player.getLife() > 0) {
 			tm.drawMap(g);
 			player.draw(g);
