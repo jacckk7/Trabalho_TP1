@@ -249,6 +249,7 @@ public class App extends Canvas implements Runnable {
 		System.out.println("line: "+line );
 		System.out.println("column: "+column );
 		if (line < 0) {
+			tm.attLastMap();();
 			tm.changeMap("above");
 			System.out.println("Map changed:");
 			System.out.println(tm.getCurrentMap());
