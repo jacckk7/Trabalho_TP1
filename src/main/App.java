@@ -17,6 +17,7 @@ import entities.Player;
 import entities.Hearts;
 import handlers.KeyHandler;
 import maps.TileManager;
+import ranking.Ranking;
 
 public class App extends Canvas implements Runnable {
 
@@ -39,12 +40,13 @@ public class App extends Canvas implements Runnable {
 	public static ArrayList<EnemyRanged> enemiesTopRight;
 	public static ArrayList<EnemyMeele> enemiesTopLeft;
 
-	public App() {
+	public App(String name) {
 		setPreferredSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));
 		initFrame();
 		keyHandler = new KeyHandler();
 		this.addKeyListener(keyHandler);
-		player = new Player(this, keyHandler);
+		player = new Player(this, keyHandler, name);
+		System.out.println(player.name);
 		hearts = new Hearts(player);
 
 		tm = new TileManager(this);
@@ -166,9 +168,12 @@ public class App extends Canvas implements Runnable {
 			hearts.update();
 		} else {
 			if (keyHandler.anyPressed) {
-				// MainMenu menu = new MainMenu();
+				MainMenu menu = new MainMenu();
+				Ranking r = new Ranking("src/ranking.txt");
+				r.add(player.name, player.score);
 				main(null);
             	frame.dispose();
+				stop();
 			}
 		}
 	}

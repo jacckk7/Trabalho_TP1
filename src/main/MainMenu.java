@@ -12,6 +12,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -21,6 +22,7 @@ import ranking.Ranking;
 public class MainMenu extends JFrame {
     private JButton startButton;
     private JButton rankingButton;
+    private JTextField nameField;
 
     public MainMenu() {
         super("Testing Buttons");
@@ -38,6 +40,9 @@ public class MainMenu extends JFrame {
         JPanel auxPanel = new JPanel();
         auxPanel.setLayout(new BoxLayout(auxPanel, BoxLayout.PAGE_AXIS));
         auxPanel.setBackground(backgroundColor);
+
+        nameField = new JTextField("Link");
+        auxPanel.add(nameField);
 
         startButton = new JButton("  START  ");
         // startButton.setBorder(new LineBorder(detailColor,1,true));
@@ -64,7 +69,9 @@ public class MainMenu extends JFrame {
     private class StartHandler implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent event) {
-            App game = new App();
+            String name = nameField.getText();
+            if (name.length() == 0) name = "Zelda";
+            App game = new App(name);
             game.start();
             dispose();
         }
