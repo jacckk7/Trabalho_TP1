@@ -21,7 +21,7 @@ import maps.TileManager;
 public class App extends Canvas implements Runnable {
 
 	public static JFrame frame;
-	private Thread thread;
+	private Thread thread; 
 	private boolean isRunning;
 	private final short SCALE = 1;
 	private final short WIDTH = 256;
@@ -107,7 +107,7 @@ public class App extends Canvas implements Runnable {
 	public static void main(String[] args) {
 		MainMenu menu = new MainMenu();
 		menu.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		menu.setSize(256, 260);
+		menu.setSize(1000, 1000);
 		menu.setResizable(false);
 		menu.pack();
 		menu.setLocationRelativeTo(null);
