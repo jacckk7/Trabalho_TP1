@@ -12,6 +12,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -21,6 +22,8 @@ import ranking.Ranking;
 public class MainMenu extends JFrame {
     private JButton startButton;
     private JButton rankingButton;
+    private JTextField nameField;
+
 
     public MainMenu() {
         super("Testing Buttons");
@@ -39,15 +42,15 @@ public class MainMenu extends JFrame {
         auxPanel.setLayout(new BoxLayout(auxPanel, BoxLayout.PAGE_AXIS));
         auxPanel.setBackground(backgroundColor);
 
-        startButton = new JButton("  START  ");
-        // startButton.setBorder(new LineBorder(detailColor,1,true));
+        nameField = new JTextField("Link");
+        auxPanel.add(nameField);
+
+        startButton = new JButton("START");
         startButton.setForeground(detailColor);
 
         auxPanel.add(startButton);
 
         rankingButton = new JButton("RANKING");
-        // rankingButton.setBorder(new LineBorder(detailColor,1,true));
-        // rankingButton.setBackground(backgroundColor);
         rankingButton.setForeground(detailColor);
         auxPanel.add(rankingButton);
 
@@ -58,13 +61,14 @@ public class MainMenu extends JFrame {
         rankingButton.addActionListener(rh);
 
         add(auxPanel);
-
     }
 
     private class StartHandler implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent event) {
-            App game = new App();
+            String name = nameField.getText();
+            if (name.length() == 0) name = "Zelda";
+            App game = new App(name);
             game.start();
             dispose();
         }
@@ -75,7 +79,6 @@ public class MainMenu extends JFrame {
         public void actionPerformed(ActionEvent event) {
             Ranking r = new Ranking("src/ranking.txt");
             r.createWindow();
-            dispose();
         }
     }
 
