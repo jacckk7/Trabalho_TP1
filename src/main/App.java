@@ -1,140 +1,280 @@
-package ranking;
+package main;
 
-// File IO
-import java.util.*;
-import java.util.stream.*;
-import java.nio.file.Paths;
-import java.nio.file.Files;
+import java.awt.Canvas;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.image.BufferStrategy;
+import java.awt.image.BufferedImage;
+import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.Date;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
+import java.util.ArrayList;
 
-import javax.swing.table.TableModel;
-import javax.swing.table.AbstractTableModel;
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
-import javax.swing.JTable;
-import javax.swing.JScrollPane;
-import java.awt.GridBagLayout;
+import entities.EnemyMeele;
+import entities.EnemyRanged;
+import entities.Player;
+import entities.Hearts;
+import handlers.KeyHandler;
+import maps.TileManager;
 
-interface Sortable {
-  boolean isSmaller(Sortable other);
-}
+public class App extends Canvas implements Runnable {
 
-class Sorter {
-  public void sort(ArrayList<? extends Sortable> a) {
-    for (int i = 0; i < a.size(); i++)
-      for (int j = 0; j < a.size(); j++)
-        if (!a.get(i).isSmaller(a.get(j)))
-          Collections.swap(a, i, j);
-  }
-}
+	public static JFrame frame;
+	private Thread thread;
+	private boolean isRunning;
+	private final short SCALE = 1;
+	private final short WIDTH = 256;
+	private final short HEIGHT = 240;
+	public final short originalTileSize = 16;
+	public final short tileSize = originalTileSize * SCALE;
+	private KeyHandler keyHandler;
+	private BufferedImage gameOver;
+	public TileManager tm;
+	Player player;
+	Hearts hearts;
 
-class Record implements Sortable {
-  public String name;
-  public int score;
-  public Date date;
-  public DateFormat df;
+	public static ArrayList<EnemyRanged> enemiesBottomLeft;
+	public static ArrayList<EnemyMeele> enemiesBottomRight;
+	public static ArrayList<EnemyRanged> enemiesTopRight;
+	public static ArrayList<EnemyMeele> enemiesTopLeft;
 
-  public Record(String line) {
-    df = new SimpleDateFormat("yyyy-MM-dd");
-    ArrayList<String> fields = new ArrayList<>(Arrays.asList(line.split(",")));
-    this.name = fields.get(0);
-    this.score = Integer.parseInt(fields.get(1));
-    try {
-      this.date = df.parse(fields.get(2));
-    } catch (ParseException e) {
-      System.out.println("Error parsing date:");
-      e.printStackTrace();
-    }
-  }
+	public App() {
+		setPreferredSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));
+		initFrame();
+		keyHandler = new KeyHandler();
+		this.addKeyListener(keyHandler);
+		player = new Player(this, keyHandler);
+		hearts = new Hearts(player);
 
-  public Record(String name, int score, Date date) {
-    df = new SimpleDateFormat("yyyy-MM-dd");
-    this.name = name;
-    this.score = score;
-    this.date = date;
-  }
+		tm = new TileManager(this);
+		System.out.println(tm.getCurrentMap());
 
-  public String encode() {
-    StringBuilder sb = new StringBuilder();
-    sb.append(this.name);
-    sb.append(',');
-    sb.append(this.score);
-    sb.append(',');
-    sb.append(df.format(this.date));
-    sb.append('\n');
-    return sb.toString();
-  }
+		enemiesBottomLeft = new ArrayList<EnemyRanged>();
+		enemiesBottomLeft.add(new EnemyRanged(192, 176, "vertical", player, this));
+		enemiesBottomLeft.add(new EnemyRanged(32, 32, "horizontal", player, this));
+		enemiesBottomLeft.add(new EnemyRanged(32, 192, "horizontal", player, this));
 
-  @Override
-  public boolean isSmaller(Sortable other) {
-		Record o = (Record) other;
-		return this.score < o.score;
+		enemiesBottomRight = new ArrayList<EnemyMeele>();
+		enemiesBottomRight.add(new EnemyMeele(192, 160, "vertical", player, this));
+		enemiesBottomRight.add(new EnemyMeele(48, 160, "vertical", player, this));
+		enemiesBottomRight.add(new EnemyMeele(80, 80, "horizontal", player, this));
+		enemiesBottomRight.add(new EnemyMeele(80, 176, "horizontal", player, this));
+
+		enemiesTopRight = new ArrayList<EnemyRanged>();
+		enemiesTopRight.add(new EnemyRanged(208, 160, "vertical", player, this));
+		enemiesTopRight.add(new EnemyRanged(32, 176, "vertical", player, this));
+		enemiesTopRight.add(new EnemyRanged(32, 48, "horizontal", player, this));
+
+		enemiesTopLeft = new ArrayList<EnemyMeele>();
+		enemiesTopLeft.add(new EnemyMeele(16, 144, "vertical", player, this));
+		enemiesTopLeft.add(new EnemyMeele(208, 144, "vertical", player, this));
+		enemiesTopLeft.add(new EnemyMeele(32, 192, "horizontal", player, this));
+		enemiesTopLeft.add(new EnemyMeele(128, 32, "horizontal", player, this));
+
+		try {
+			gameOver = ImageIO.read(new FileInputStream("src/assets/game_over.png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
-}
 
-public class Ranking {
-  public static ArrayList<Record> records;
-  public static String filename;
+	public void initFrame() {
+		frame = new JFrame("Zelda");
+		frame.add(this);
+		frame.setResizable(false);
+		frame.pack();
+		frame.setLocationRelativeTo(null);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setVisible(true);
+	}
 
-  public Ranking(String filename) {
-    this.filename = filename;
-    records = new ArrayList<Record>();
-    try {
-      Stream<String> lines = Files.lines(Paths.get(filename));
-      lines.forEach(line -> records.add(new Record(line)));
-    } catch (IOException e) {
-      System.out.println("Error reading records:");
-      e.printStackTrace();
-    }
-    Sorter s = new Sorter();
-    s.sort(records);
-  }
+	public synchronized void start() {
+		isRunning = true;
+		thread = new Thread(this);
+		thread.start();
+	}
 
-  public static void save(String filename) {
-    try {
-      BufferedWriter writer = new BufferedWriter(new FileWriter(filename));
-      for (Record rr : records) writer.write(rr.encode());
-      writer.close();
-    } catch (IOException e) {
-      System.out.println("Error saving ranking:");
-      e.printStackTrace();
-    }
-  }
+	public synchronized void stop() {
+		isRunning = false;
+		try {
+			thread.join();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
 
-  public static void add(String name, int score) {
-    records.add(new Record(name, score, new Date()));
-    Sorter s = new Sorter();
-    s.sort(records);
-    save(filename);
-  }
+	public static void main(String[] args) {
+		MainMenu menu = new MainMenu();
+		menu.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		menu.setSize(1000, 1000);
+		menu.setResizable(false);
+		menu.pack();
+		menu.setLocationRelativeTo(null);
+		menu.setVisible(true);
+	}
 
-  public void createWindow() {
-    TableModel dataModel = new AbstractTableModel() {
-      public int getColumnCount() { return 3; }
-      public String getColumnName(int col) {
-        if (col == 0) return "Name";
-        else if (col == 1) return "Score";
-        else return "Date";
-      }
-      public int getRowCount() { return records.size();}
-      public Object getValueAt(int row, int col) {
-        if (col == 0) return records.get(row).name;
-        else if (col == 1) return records.get(row).score;
-        else return records.get(row).df.format(records.get(row).date);
-      }
-    };
-    JTable table = new JTable(dataModel);
-    JScrollPane scrollpane = new JScrollPane(table);
+	public void update() {
+		player.update();
+		int getIndex = -1;
+		if (tm.getCurrentMap().getName().equals("Bottom left")) {
+			for (int i = 0; i < enemiesBottomLeft.size(); i++) {
+				if (enemiesBottomLeft.get(i).getLife() < 0) {
+					getIndex = i;
+				}
+				enemiesBottomLeft.get(i).update();
+			}
+			if (getIndex != -1) {
+				enemiesBottomLeft.remove(getIndex);
+				getIndex = -1;
+			}
+		} else if (tm.getCurrentMap().getName().equals("Bottom Right")) {
+			for (int i = 0; i < enemiesBottomRight.size(); i++) {
+				if (enemiesBottomRight.get(i).getLife() < 0) {
+					getIndex = i;
+				}
+				enemiesBottomRight.get(i).update();
+			}
+			if (getIndex != -1) {
+				enemiesBottomRight.remove(getIndex);
+				getIndex = -1;
+			}
+		} else if (tm.getCurrentMap().getName().equals("Top Right")) {
+			for (int i = 0; i < enemiesTopRight.size(); i++) {
+				if (enemiesTopRight.get(i).getLife() < 0) {
+					getIndex = i;
+				}
+				enemiesTopRight.get(i).update();
+			}
+			if (getIndex != -1) {
+				enemiesTopRight.remove(getIndex);
+				getIndex = -1;
+			}
+		} else if (tm.getCurrentMap().getName().equals("Top left")) {
+			for (int i = 0; i < enemiesTopLeft.size(); i++) {
+				if (enemiesTopLeft.get(i).getLife() < 0) {
+					getIndex = i;
+				}
+				enemiesTopLeft.get(i).update();
+			}
+			if (getIndex != -1) {
+				enemiesTopLeft.remove(getIndex);
+				getIndex = -1;
+			}
+		}
+		hearts.update();
+	}
 
-    JFrame frame = new JFrame("lol");
-    frame.setLayout(new GridBagLayout());
-    frame.add(scrollpane);
-    frame.setSize(500, 500);
-    frame.setVisible(true);
-  }
+	
+
+	public void render() {
+		BufferStrategy bs = this.getBufferStrategy();
+		if (bs == null) {
+			this.createBufferStrategy(3);
+			return;
+		}
+		Graphics g = bs.getDrawGraphics();
+		if (player.getLife() > 0) {
+			tm.drawMap(g);
+			player.draw(g);
+
+			if (tm.getCurrentMap().getName().equals("Bottom left")) {
+				for (EnemyRanged enemies : enemiesBottomLeft) {
+					enemies.draw(g);
+				}
+			} else if (tm.getCurrentMap().getName().equals("Bottom Right")) {
+				for (EnemyMeele enemies : enemiesBottomRight) {
+					enemies.draw(g);
+				}
+			} else if (tm.getCurrentMap().getName().equals("Top Right")) {
+				for (EnemyRanged enemies : enemiesTopRight) {
+					enemies.draw(g);
+				}
+			} else if (tm.getCurrentMap().getName().equals("Top left")) {
+				for (EnemyMeele enemies : enemiesTopLeft) {
+					enemies.draw(g);
+				}
+			}
+
+			hearts.draw(g);
+		} else {
+			g.drawImage(gameOver, 0, 0, null);
+			if (keyHandler.anyPressed) {
+				main(null);
+				stop();
+				frame.dispose();
+			}
+		}
+
+		bs.show();
+		g.dispose();
+
+	}
+
+	@Override
+	public void run() {
+		long lastTime = System.nanoTime();
+		double amountOfTicks = 30.0;
+		double ns = 1000000000 / amountOfTicks;
+		double delta = 0;
+		int frames = 0;
+		double timer = System.currentTimeMillis();
+		requestFocus();
+
+		while (isRunning) {
+			long now = System.nanoTime();
+			delta += (now - lastTime) / ns;
+			lastTime = now;
+			if (delta >= 1) {
+				update();
+
+				render();
+
+				frames++;
+				delta = 0;
+			}
+
+			if (System.currentTimeMillis() - timer >= 1000) {
+				System.out.println("FPS: " + frames);
+				frames = 0;
+				timer += 1000;
+			}
+		}
+
+		stop();
+	}
+
+	public int checkMapPosition(int line, int column) {
+		if (line < 0) {
+			tm.attLastMap();
+			tm.changeMap("above");
+			System.out.println("Map changed:");
+			System.out.println(tm.getCurrentMap());
+			player.setPositionY(224);
+			return 1;
+		}
+		if (column < 0) {
+			tm.changeMap("besideLeft");
+			System.out.println("Map changed:");
+			System.out.println(tm.getCurrentMap());
+			player.setPositionX(224);
+			return 1;
+		}
+		if (line > 14) {
+			tm.changeMap("below");
+			System.out.println("Map changed:");
+			System.out.println(tm.getCurrentMap());
+			player.setPositionY(0);
+			return 1;
+		}
+		if (column > 15) {
+			tm.changeMap("besideRight");
+			System.out.println("Map changed:");
+			System.out.println(tm.getCurrentMap());
+			player.setPositionX(0);
+			return 1;
+		}
+		return tm.getCurrentMap().mapTiles[line][column];
+	}
+
 }
