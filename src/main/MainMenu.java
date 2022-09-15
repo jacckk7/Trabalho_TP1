@@ -40,14 +40,11 @@ public class MainMenu extends JFrame {
         auxPanel.setBackground(backgroundColor);
 
         startButton = new JButton("  START  ");
-        // startButton.setBorder(new LineBorder(detailColor,1,true));
         startButton.setForeground(detailColor);
 
         auxPanel.add(startButton);
 
         rankingButton = new JButton("RANKING");
-        // rankingButton.setBorder(new LineBorder(detailColor,1,true));
-        // rankingButton.setBackground(backgroundColor);
         rankingButton.setForeground(detailColor);
         auxPanel.add(rankingButton);
 

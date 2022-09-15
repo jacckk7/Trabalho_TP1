@@ -5,7 +5,7 @@ import java.awt.event.KeyListener;
 
 public class KeyHandler implements KeyListener { 
 
-	public boolean upPressed, downPressed, leftPressed, rightPressed, kPressed, anyPressed;
+	private boolean upPressed, downPressed, leftPressed, rightPressed, kPressed, anyPressed;
 
 	public KeyHandler() {
 	}
@@ -16,23 +16,23 @@ public class KeyHandler implements KeyListener {
 
 	public void keyPressed(KeyEvent event) {
 		int keyCode = event.getKeyCode();
-		anyPressed = true;
+		setAnyPressed(true);
 		
 		switch (keyCode) {
 			case KeyEvent.VK_W:
-				upPressed = true;
+				setUpPressed(true);
 				break;
 			case KeyEvent.VK_S:
-				downPressed = true;
+				setDownPressed(true);
 				break;
 			case KeyEvent.VK_A:
-				leftPressed = true;
+				setLeftPressed(true);
 				break;
 			case KeyEvent.VK_D:
-				rightPressed = true;
+				setRightPressed(true);
 				break;
 			case KeyEvent.VK_K:
-				kPressed = true;
+				setKPressed(true);
 				break;
 		}
 
@@ -40,25 +40,99 @@ public class KeyHandler implements KeyListener {
 
 	public void keyReleased(KeyEvent event) {
 		int keyCode = event.getKeyCode();
-		anyPressed = false;
+		setAnyPressed(false);
 
 		switch (keyCode) {
 			case KeyEvent.VK_W:
-				upPressed = false;
-				break;
-			case KeyEvent.VK_S:
-				downPressed = false;
-				break;
-			case KeyEvent.VK_A:
-				leftPressed = false;
-				break;
-			case KeyEvent.VK_D:
-				rightPressed = false;
-				break;
-			case KeyEvent.VK_K:
-				kPressed = false;
-				break;
+			setUpPressed(false);
+			break;
+		case KeyEvent.VK_S:
+			setDownPressed(false);
+			break;
+		case KeyEvent.VK_A:
+			setLeftPressed(false);
+			break;
+		case KeyEvent.VK_D:
+			setRightPressed(false);
+			break;
+		case KeyEvent.VK_K:
+			setKPressed(false);
+			break;
 		}
 	}
+
+
+	public boolean isUpPressed() {
+		return this.upPressed;
+	}
+
+	public boolean getUpPressed() {
+		return this.upPressed;
+	}
+
+	public void setUpPressed(boolean upPressed) {
+		this.upPressed = upPressed;
+	}
+
+	public boolean isDownPressed() {
+		return this.downPressed;
+	}
+
+	public boolean getDownPressed() {
+		return this.downPressed;
+	}
+
+	public void setDownPressed(boolean downPressed) {
+		this.downPressed = downPressed;
+	}
+
+	public boolean isLeftPressed() {
+		return this.leftPressed;
+	}
+
+	public boolean getLeftPressed() {
+		return this.leftPressed;
+	}
+
+	public void setLeftPressed(boolean leftPressed) {
+		this.leftPressed = leftPressed;
+	}
+
+	public boolean isRightPressed() {
+		return this.rightPressed;
+	}
+
+	public boolean getRightPressed() {
+		return this.rightPressed;
+	}
+
+	public void setRightPressed(boolean rightPressed) {
+		this.rightPressed = rightPressed;
+	}
+
+	public boolean isKPressed() {
+		return this.kPressed;
+	}
+
+	public boolean getKPressed() {
+		return this.kPressed;
+	}
+
+	public void setKPressed(boolean kPressed) {
+		this.kPressed = kPressed;
+	}
+
+	public boolean isAnyPressed() {
+		return this.anyPressed;
+	}
+
+	public boolean getAnyPressed() {
+		return this.anyPressed;
+	}
+
+	public void setAnyPressed(boolean anyPressed) {
+		this.anyPressed = anyPressed;
+	}
+
 
 }
