@@ -33,6 +33,7 @@ public class EnemyRanged extends Character {
         this.initial_positionY = positionY;
         this.player = player;
         this.gp = gp;
+        this.scoreForKilling = 120;
         if(movement.equals("horizontal")) {
             super.direction = "right";
         }
@@ -241,15 +242,8 @@ public class EnemyRanged extends Character {
 
     public void getHit() {
         this.life -= 1;
-        // if (direction.equals("down")) {
-        //     positionY -= 4;
-        // } else if (direction.equals("left")) {
-        //     positionX += 4;
-        // } else if (direction.equals("up")) {
-        //     positionY += 4;
-        // } else if (direction.equals("right")) {
-        //     positionX -= 4;
-        // }
+        if (this.life == 0) this.player.score += this.scoreForKilling;
+        this.player.score += 3;
     }
 
     public void getRangedEnemyImage() {

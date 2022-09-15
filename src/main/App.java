@@ -2,6 +2,7 @@ package main;
 
 import java.awt.Canvas;
 import java.awt.Dimension;
+import java.awt.Graphics2D;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
@@ -17,17 +18,17 @@ import entities.Player;
 import entities.Hearts;
 import handlers.KeyHandler;
 import maps.TileManager;
+import ranking.Ranking;
 
 public class App extends Canvas implements Runnable {
 
 	public static JFrame frame;
 	private Thread thread; 
 	private boolean isRunning;
-	private final short SCALE = 1;
-	private final short WIDTH = 256;
-	private final short HEIGHT = 240;
+	private final short WIDTH = 750;
+	private final short HEIGHT = 720;
 	public final short originalTileSize = 16;
-	public final short tileSize = originalTileSize * SCALE;
+	public final short tileSize = originalTileSize;
 	private KeyHandler keyHandler;
 	private BufferedImage gameOver;
 	public TileManager tm;
@@ -39,12 +40,12 @@ public class App extends Canvas implements Runnable {
 	public static ArrayList<EnemyRanged> enemiesTopRight;
 	public static ArrayList<EnemyMeele> enemiesTopLeft;
 
-	public App() {
-		setPreferredSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));
+	public App(String name) {
+		setPreferredSize(new Dimension(WIDTH, HEIGHT));
 		initFrame();
 		keyHandler = new KeyHandler();
 		this.addKeyListener(keyHandler);
-		player = new Player(this, keyHandler);
+		player = new Player(this, keyHandler, name);
 		hearts = new Hearts(player);
 
 		tm = new TileManager(this);
@@ -204,6 +205,7 @@ public class App extends Canvas implements Runnable {
 			return;
 		}
 		Graphics g = bs.getDrawGraphics();
+		((Graphics2D) g).scale(3.0, 3.0);
 		if (player.getLife() > 0) {
 			tm.drawMap(g);
 			player.draw(g);
@@ -229,7 +231,13 @@ public class App extends Canvas implements Runnable {
 			hearts.draw(g);
 		} else {
 			g.drawImage(gameOver, 0, 0, null);
+<<<<<<< HEAD
 			if (keyHandler.getAnyPressed()) {
+=======
+			if (keyHandler.anyPressed) {
+				Ranking r = new Ranking("src/ranking.txt");
+				r.add(player.name, player.score);
+>>>>>>> 91ca47fe78f8014c05cd0c641e4a20391949f6b9
 				main(null);
 				stop();
 				frame.dispose();

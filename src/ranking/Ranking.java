@@ -20,6 +20,7 @@ import javax.swing.JTable;
 import javax.swing.JScrollPane;
 import java.awt.GridBagLayout;
 
+
 interface Sortable {
   boolean isSmaller(Sortable other);
 }

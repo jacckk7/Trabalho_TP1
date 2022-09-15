@@ -26,55 +26,54 @@ public class Hearts {
         BufferedImage image1 = null, image2 = null, image3 = null;
         g.drawImage(background, positionX - 1, positionY - 1, null);
 
-        if (playerLife > 0) {
-            if (playerLife < 5) {
-                if (playerLife % 4 == 0) {
-                    image1 = full;
-                    g.drawImage(image1, positionX, positionY, null);
-                } else if (playerLife % 4 == 3) {
-                    image1 = tresQuartos;
-                    g.drawImage(image1, positionX, positionY, null);
-                } else if (playerLife % 4 == 2) {
-                    image1 = umMeio;
-                    g.drawImage(image1, positionX, positionY, null);
-                } else if (playerLife % 4 == 1) {
-                    image1 = umQuarto;
-                    g.drawImage(image1, positionX, positionY, null);
-                }
-            } else if (playerLife < 9) {
+        if (playerLife < 0) return;
+        if (playerLife < 5) {
+            if (playerLife % 4 == 0) {
                 image1 = full;
+                g.drawImage(full, positionX, positionY, null);
+            } else if (playerLife % 4 == 3) {
+                image1 = tresQuartos;
                 g.drawImage(image1, positionX, positionY, null);
-                if (playerLife % 4 == 0) {
-                    image2 = full;
-                    g.drawImage(image2, positionX + 7, positionY, null);
-                } else if (playerLife % 4 == 3) {
-                    image2 = tresQuartos;
-                    g.drawImage(image2, positionX + 7, positionY, null);
-                } else if (playerLife % 4 == 2) {
-                    image2 = umMeio;
-                    g.drawImage(image2, positionX + 7, positionY, null);
-                } else if (playerLife % 4 == 1) {
-                    image2 = umQuarto;
-                    g.drawImage(image2, positionX + 7, positionY, null);
-                }
-            } else {
-                image1 = full;
+            } else if (playerLife % 4 == 2) {
+                image1 = umMeio;
                 g.drawImage(image1, positionX, positionY, null);
+            } else if (playerLife % 4 == 1) {
+                image1 = umQuarto;
+                g.drawImage(image1, positionX, positionY, null);
+            }
+        } else if (playerLife < 9) {
+            image1 = full;
+            g.drawImage(image1, positionX, positionY, null);
+            if (playerLife % 4 == 0) {
                 image2 = full;
                 g.drawImage(image2, positionX + 7, positionY, null);
-                if (playerLife % 4 == 0) {
-                    image3 = full;
-                    g.drawImage(image3, positionX + 14, positionY, null);
-                } else if (playerLife % 4 == 3) {
-                    image3 = tresQuartos;
-                    g.drawImage(image3, positionX + 14, positionY, null);
-                } else if (playerLife % 4 == 2) {
-                    image3 = umMeio;
-                    g.drawImage(image3, positionX + 14, positionY, null);
-                } else if (playerLife % 4 == 1) {
-                    image3 = umQuarto;
-                    g.drawImage(image3, positionX + 14, positionY, null);
-                }
+            } else if (playerLife % 4 == 3) {
+                image2 = tresQuartos;
+                g.drawImage(image2, positionX + 7, positionY, null);
+            } else if (playerLife % 4 == 2) {
+                image2 = umMeio;
+                g.drawImage(image2, positionX + 7, positionY, null);
+            } else if (playerLife % 4 == 1) {
+                image2 = umQuarto;
+                g.drawImage(image2, positionX + 7, positionY, null);
+            }
+        } else {
+            image1 = full;
+            g.drawImage(image1, positionX, positionY, null);
+            image2 = full;
+            g.drawImage(image2, positionX + 7, positionY, null);
+            if (playerLife % 4 == 0) {
+                image3 = full;
+                g.drawImage(image3, positionX + 14, positionY, null);
+            } else if (playerLife % 4 == 3) {
+                image3 = tresQuartos;
+                g.drawImage(image3, positionX + 14, positionY, null);
+            } else if (playerLife % 4 == 2) {
+                image3 = umMeio;
+                g.drawImage(image3, positionX + 14, positionY, null);
+            } else if (playerLife % 4 == 1) {
+                image3 = umQuarto;
+                g.drawImage(image3, positionX + 14, positionY, null);
             }
         }
     }

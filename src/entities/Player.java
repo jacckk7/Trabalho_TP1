@@ -18,9 +18,12 @@ public class Player extends Character {
 			attackUp1, attackUp2, attackDown1, attackDown2, attackLeft1, attackLeft2, attackRight1, attackRight2;
 	public boolean isAttacking;
 	public int attackSpriteCounter;
+	public int score;
+	public String name;
 
-	public Player(App gp, KeyHandler kh) {
+	public Player(App gp, KeyHandler kh, String name) {
 		super(16, 130, 4.0, "down");
+		this.name = name;
 		this.gp = gp;
 		this.kh = kh;
 		this.direction = "down";
@@ -361,6 +364,7 @@ public class Player extends Character {
 
 	public void getHit() {
 		this.life -= 1;
+		this.score -= 3;
 		if (direction.equals("down")) {
             positionY -= 4;
         } else if (direction.equals("left")) {
