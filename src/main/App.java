@@ -118,6 +118,7 @@ public class App extends Canvas implements Runnable {
 		if (player.getLife() > 0) {
 			player.update();
 			int getIndex = -1;
+
 			if (tm.getCurrentMap().getName().equals("Bottom left")) {
 				for(int i = 0; i < enemiesBottomLeft.size(); i++) {
 					if (enemiesBottomLeft.get(i).getLife() < 0) {
@@ -163,13 +164,36 @@ public class App extends Canvas implements Runnable {
 					getIndex = -1;
 				}
 			}
-			hearts.update();
-		} else {
-			if (keyHandler.anyPressed) {
-				// MainMenu menu = new MainMenu();
-				main(null);
-            	frame.dispose();
+
+			if (tm.getLastMapName().equals("Bottom left")) {
+				enemiesBottomLeft.removeAll(enemiesBottomLeft);
+				enemiesBottomLeft.add(new EnemyRanged(192, 176, "vertical", player, this));
+				enemiesBottomLeft.add(new EnemyRanged(32, 32, "horizontal", player, this));
+				enemiesBottomLeft.add(new EnemyRanged(32, 192, "horizontal", player, this));
+				tm.setLastMapName("");
+			} else if (tm.getLastMapName().equals("Bottom Right")) {
+				enemiesBottomRight.removeAll(enemiesBottomRight);
+				enemiesBottomRight.add(new EnemyMeele(192, 160, "vertical", player, this));
+				enemiesBottomRight.add(new EnemyMeele(48, 160, "vertical", player, this));
+				enemiesBottomRight.add(new EnemyMeele(80, 80, "horizontal", player, this));
+				enemiesBottomRight.add(new EnemyMeele(80, 176, "horizontal", player, this));
+				tm.setLastMapName("");
+			} else if (tm.getLastMapName().equals("Top Right")) {
+				enemiesTopRight.removeAll(enemiesTopRight);
+				enemiesTopRight.add(new EnemyRanged(208, 160, "vertical", player, this));
+				enemiesTopRight.add(new EnemyRanged(32, 176, "vertical", player, this));
+				enemiesTopRight.add(new EnemyRanged(32, 48, "horizontal", player, this));
+				tm.setLastMapName("");
+			} else if (tm.getLastMapName().equals("Top left")) {
+				enemiesTopLeft.removeAll(enemiesTopLeft);
+				enemiesTopLeft.add(new EnemyMeele(16, 144, "vertical", player, this));
+				enemiesTopLeft.add(new EnemyMeele(208, 144, "vertical", player, this));
+				enemiesTopLeft.add(new EnemyMeele(32, 192, "horizontal", player, this));
+				enemiesTopLeft.add(new EnemyMeele(128, 32, "horizontal", player, this));
+				tm.setLastMapName("");
 			}
+
+			hearts.update();
 		}
 	}
 
@@ -249,7 +273,7 @@ public class App extends Canvas implements Runnable {
 		System.out.println("line: "+line );
 		System.out.println("column: "+column );
 		if (line < 0) {
-			tm.attLastMap();();
+			tm.attLastMap();
 			tm.changeMap("above");
 			System.out.println("Map changed:");
 			System.out.println(tm.getCurrentMap());
@@ -257,6 +281,7 @@ public class App extends Canvas implements Runnable {
 			return 1;
 		}
 		if (column < 0) {
+			tm.attLastMap();
 			tm.changeMap("besideLeft");
 			System.out.println("Map changed:");
 			System.out.println(tm.getCurrentMap());
@@ -264,6 +289,7 @@ public class App extends Canvas implements Runnable {
 			return 1;
 		}
 		if (line > 14) {
+			tm.attLastMap();
 			tm.changeMap("below");
 			System.out.println("Map changed:");
 			System.out.println(tm.getCurrentMap());
@@ -271,6 +297,7 @@ public class App extends Canvas implements Runnable {
 			return 1;
 		}
 		if (column > 15) {
+			tm.attLastMap();
 			tm.changeMap("besideRight");
 			System.out.println("Map changed:");
 			System.out.println(tm.getCurrentMap());
