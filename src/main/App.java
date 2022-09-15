@@ -164,12 +164,6 @@ public class App extends Canvas implements Runnable {
 				}
 			}
 			hearts.update();
-		} else {
-			if (keyHandler.anyPressed) {
-				// MainMenu menu = new MainMenu();
-				main(null);
-            	frame.dispose();
-			}
 		}
 	}
 
@@ -205,6 +199,7 @@ public class App extends Canvas implements Runnable {
 			hearts.draw(g);
 		} else {
 			g.drawImage(gameOver, 0, 0, null);
+			
 		}
 
 		bs.show();
