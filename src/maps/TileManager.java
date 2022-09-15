@@ -17,6 +17,7 @@ public class TileManager {
 
 	public TileManager(App App) {
 		lastMapName = "";
+
 		try {
 			images = new ArrayList<BufferedImage>();
 			images.add(ImageIO.read(new FileInputStream("src/assets/bush.png")));
@@ -71,7 +72,7 @@ public class TileManager {
 	public void drawMap(Graphics g) {
 		for (int line = 0; line < 15; line++) {
 			for (int col = 0; col < 16; col++) {
-				int tile = currentMap.getMapTiles()[line][col];
+				int tile = currentMap.mapTiles[line][col];
 				g.drawImage(images.get(tile), 16 * col, 16 * line, gp.tileSize, gp.tileSize, null);
 			}
 		}

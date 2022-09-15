@@ -6,12 +6,12 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Map {
-	private int[][] mapTiles = new int[15][16];
-	private String name;
-	private Map above;
-	private Map besideLeft;
-	private Map below;
-    private Map besideRight;
+	public int[][] mapTiles = new int[15][16];
+	public String name;
+	public Map above;
+	public Map besideLeft;
+	public Map below;
+    public Map besideRight;
 
 	public Map(int[][] mapTiles, Map above, Map besideLeft, Map below, Map besideRight) {
 		this.mapTiles = mapTiles;

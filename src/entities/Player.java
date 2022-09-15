@@ -37,7 +37,7 @@ public class Player extends Character {
 		int nextY, nextX;
 		boolean needsToCheckNext;
 
-		if (kh.getUpPressed() || kh.getLeftPressed() || kh.getRightPressed() || kh.getDownPressed() || kh.getKPressed()) {
+		if (kh.upPressed || kh.leftPressed || kh.rightPressed || kh.downPressed || kh.kPressed) {
 			spriteCounter++;
 
 			if (spriteCounter > 10) {
@@ -49,7 +49,7 @@ public class Player extends Character {
 				spriteCounter = 0;
 			}
 		}
-		if (kh.getUpPressed()) {
+		if (kh.upPressed) {
 			nextY = (int) Math.floor((positionY - speed) / 16);
 			nextX = (int) (positionX / 16);
 
@@ -69,7 +69,7 @@ public class Player extends Character {
 			direction = "up";
 			return;
 		}
-		if (kh.getDownPressed()) {
+		if (kh.downPressed) {
 			nextY = (int) Math.ceil((positionY + speed) / 16);
 			nextX = (int) (positionX / 16);
 
@@ -89,7 +89,7 @@ public class Player extends Character {
 			direction = "down";
 			return;
 		}
-		if (kh.getLeftPressed()) {
+		if (kh.leftPressed) {
 			nextY = (int) (positionY / 16);
 			nextX = (int) Math.floor((positionX - speed) / 16);
 
@@ -110,7 +110,7 @@ public class Player extends Character {
 			return;
 		}
 
-		if (kh.getRightPressed()) {
+		if (kh.rightPressed) {
 			nextY = (int) (positionY / 16);
 			nextX = (int) Math.ceil((positionX + speed) / 16);
 			isAttacking = false;
@@ -132,7 +132,7 @@ public class Player extends Character {
 			return;
 		}
 
-		if (kh.getKPressed()) {
+		if (kh.kPressed) {
 			isAttacking = true;
 			isHiting();
 		}
