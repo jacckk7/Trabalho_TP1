@@ -13,6 +13,7 @@ public class TileManager {
 	Map currentMap;
 	App gp;
 	ArrayList<BufferedImage> images;
+	String lastMapName;
 
 	public TileManager(App App) {
 		try {
@@ -91,5 +92,9 @@ public class TileManager {
 				this.currentMap = this.currentMap.getBesideRight();
 				break;
 		}
+	}
+
+	public void attLastMap(){
+		lastMapName = currentMap.getName();
 	}
 }
