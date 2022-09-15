@@ -231,9 +231,7 @@ public class App extends Canvas implements Runnable {
 			hearts.draw(g);
 		} else {
 			g.drawImage(gameOver, 0, 0, null);
-			if (keyHandler.anyPressed) {
-				Ranking r = new Ranking("src/ranking.txt");
-				r.add(player.name, player.score);
+			if (keyHandler.getAnyPressed()) {
 				main(null);
 				stop();
 				frame.dispose();
@@ -311,7 +309,7 @@ public class App extends Canvas implements Runnable {
 			player.setPositionX(0);
 			return 1;
 		}
-		return tm.getCurrentMap().mapTiles[line][column];
+		return tm.getCurrentMap().getMapTiles()[line][column];
 	}
 
 }
