@@ -16,6 +16,8 @@ import javax.swing.JButton;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
+import ranking.Ranking;
+
 public class MainMenu extends JFrame {
     private JButton startButton;
     private JButton rankingButton;
@@ -71,7 +73,9 @@ public class MainMenu extends JFrame {
     private class RankingHandler implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent event) {
-            // faz alguma coisa
+            Ranking r = new Ranking("src/ranking.txt");
+            r.createWindow();
+            dispose();
         }
     }
 
